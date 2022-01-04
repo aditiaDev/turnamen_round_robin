@@ -9,21 +9,22 @@
         <div class="col-12">
           <div class="card" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Data User</h3>
+              <h3 class="card-title">Data Event</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <button class="btn btn-sm btn-info" style="margin-bottom: 10px;" id="add_data"><i class="fas fa-plus-circle"></i> Tambah User Admin</button>
+              <a class="btn btn-sm btn-info" href="<?php echo base_url('event/addData')?>" style="margin-bottom: 10px;"><i class="fas fa-plus-circle"></i> Tambah Data</a>
               <table id="tb_data" class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Username</th>
-                  <th>Password</th>
-                  <th>Level</th>
-                  <th>Status Akun</th>
-                  <th>Action</th>
-                </tr>
+                    <tr>
+                    <th>No.</th>
+                    <th>Nama Event</th>
+                    <th>Tanggal Event</th>
+                    <th>Tanggal Pendaftaran</th>
+                    <th>Biaya Pendaftaran</th>
+                    <th>Status Event</th>
+                    <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                 
@@ -125,21 +126,6 @@
       $("#modal_add").modal('hide')
     })
 
-    /*$('#tb_data tbody').on('click', 'td>button.detail_data', function () {
-      
-        var tr = $(this).closest('tr');
-        var row = tb_data.row( tr );
-        console.log(row.data())
-        save_method = "edit"
-        $("#modal_add .modal-title").text('Edit Data')
-        $("[name='username']").val(row.data().username)
-        $("[name='password']").val(row.data().password)
-        $("[name='level']").val(row.data().level)
-        $("#modal_add").modal('show')
-    })*/
-
-
-
   });
 
   function ACTION(urlPost, formData){
@@ -171,7 +157,7 @@
       "autoWidth": false,
       "responsive": true,
       "ajax": {
-          "url": "<?php echo site_url('user/getAllUser') ?>",
+          "url": "<?php echo site_url('event/getAllData') ?>",
           "type": "GET"
       },
       "columns": [
@@ -181,12 +167,12 @@
                   return meta.row + meta.settings._iDisplayStart + 1;
               }
           },
-          { "data": "username" },{ "data": "password" },{ "data": "hak_akses" },{ "data": "status" },
+          { "data": "nm_event" },{ "data": "tgl_event" },{ "data": "tgl_pendaftaran" },{ "data": "biaya_pendaftaran" },{ "data": "status" },
           { "data": null, 
             "render" : function(data, type, full, meta){
               // console.log(meta.row)
-              return "<button class='btn btn-sm btn-warning' onclick='editUser("+JSON.stringify(data)+",\""+meta.row+"\");'><i class='fas fa-edit'></i> Edit</button> "+
-                "<button class='btn btn-sm btn-danger' onclick='deleteUser(\""+data.id_user+"\");'><i class='fas fa-trash'></i> Delete</button>"
+              return "<button class='btn btn-sm btn-warning' onclick='editUser(\""+data.id_event+"\");'><i class='fas fa-edit'></i> Edit</button> "+
+                "<button class='btn btn-sm btn-danger' onclick='deleteUser(\""+data.id_event+"\");'><i class='fas fa-trash'></i> Delete</button>"
             },
             className: "text-center"
           },

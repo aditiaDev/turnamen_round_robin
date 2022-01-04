@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mebel Buk Dhe Jepara</title>
+  <title>Turnamen SIngle Round Robin</title>
   <link rel="shortcut icon" type="image/icon" href="<?php echo base_url('/assets/furn/assets/logo/favicon.png'); ?>"/>
   <!-- Google Font: Source Sans Pro -->
   <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> -->
@@ -77,7 +77,7 @@
       border-radius: 0px!important;
     }
     .content-wrapper{
-      font-size: 12px;
+      font-size: 14px;
     }
     .skin-blue-light .treeview-menu>li.active>a {
       font-weight: 400;
@@ -129,7 +129,7 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="<?php echo base_url('/assets/adminlte/dist/img/AdminLTELogo.png'); ?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Mebel Buk Dhe</span>
+      <span class="brand-text font-weight-light">Turnamen</span>
     </a>
 
     <!-- Sidebar -->

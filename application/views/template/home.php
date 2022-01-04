@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <h3>Selamat datang pada Sistem Pengelolaan Usaha Mebel Buk Dhe Jepara</h3>
+              <h3>Selamat datang pada Sistem Turnamen methode Single Round Robin</h3>
             </div>
             <!-- /.card-body -->
           </div>
