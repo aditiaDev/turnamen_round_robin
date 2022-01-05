@@ -35,4 +35,54 @@ class Event extends CI_Controller {
     $this->load->view('template/footer');
   }
 
+  public function saveData(){
+
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('nm_event', 'Nama Event', 'required');
+    $this->form_validation->set_rules('tgl_event', 'Tanggal Event', 'required');
+    $this->form_validation->set_rules('tgl_pendaftaran', 'Tanggal Pendaftaran', 'required');
+    $this->form_validation->set_rules('status', 'Status', 'required');
+    $this->form_validation->set_rules('biaya_pendaftaran', 'Biaya Pendaftaran', 'required');
+    $this->form_validation->set_rules('deskripsi', 'Deskripsi Event', 'required');
+
+    if($this->form_validation->run() == FALSE){
+      $output = array("status" => "error", "message" => validation_errors());
+      echo json_encode($output);
+      return false;
+    }
+
+    $unik = 'EV'.date('Ym');
+    $kode = $this->db->query("select MAX(id_event) LAST_NO from tb_event WHERE id_event LIKE '".$unik."%'")->row()->LAST_NO;
+    
+    $urutan = (int) substr($kode, -4);
+    $urutan++;
+    $kode = $unik . sprintf("%04s", $urutan);
+    
+    $tgl_start = date("Y-m-d H:i:s", strtotime(substr($this->input->post('tgl_pendaftaran'),0,16)));
+    $tgl_selesai = date("Y-m-d H:i:s", strtotime(substr($this->input->post('tgl_pendaftaran'),-16)));
+
+    $data = array(
+              "id_event" => $kode,
+              "nm_event" => $this->input->post('nm_event'),
+              "tgl_event" => date("Y-m-d", strtotime($this->input->post('tgl_event'))),
+              "tgl_start_pendaftaran" => $tgl_start,
+              "tgl_selesai_pendaftaran" => $tgl_selesai,
+              "status" => $this->input->post('status'),
+              "biaya_pendaftaran" => str_replace(",",".",str_replace(".","",$this->input->post('biaya_pendaftaran'))),
+              "deskripsi" => $this->input->post('deskripsi'),
+            );
+    $this->db->insert('tb_event', $data);
+    $output = array("status" => "success", "message" => "Data Berhasil Disimpan");
+    echo json_encode($output);
+
+  }
+
+  public function deleteData(){
+    $this->db->where('id_event', $this->input->post('id_event'));
+    $this->db->delete('tb_event');
+
+    $output = array("status" => "success", "message" => "Data Berhasil di Hapus");
+    echo json_encode($output);
+  }
+
 }
