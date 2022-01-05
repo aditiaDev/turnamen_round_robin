@@ -23,7 +23,7 @@
                     <th>Tanggal Pendaftaran</th>
                     <th>Biaya Pendaftaran</th>
                     <th>Status Event</th>
-                    <th>Action</th>
+                    <th style="width: 127px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>

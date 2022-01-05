@@ -13,11 +13,12 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <button class="btn btn-sm btn-info" style="margin-bottom: 10px;" id="add_data"><i class="fas fa-plus-circle"></i> Tambah User Admin</button>
+              <button class="btn btn-sm btn-info" style="margin-bottom: 10px;" id="add_data"><i class="fas fa-plus-circle"></i> Tambah Data</button>
               <table id="tb_data" class="table table-bordered table-hover">
                 <thead>
                 <tr>
                   <th>No.</th>
+                  <th>Nama User</th>
                   <th>Username</th>
                   <th>Password</th>
                   <th>Level</th>
@@ -65,6 +66,7 @@
                 <label>Level Akses</label>
                 <select class="form-control" name="hak_akses">
                   <option value="ADMIN">ADMIN</option>
+                  <option value="PESERTA">PESERTA</option>
                 </select>
               </div>
               <div class="form-group">
@@ -167,7 +169,7 @@
     $('#tb_data').DataTable().destroy();
     var tb_data = $("#tb_data").DataTable({
       "order": [[ 0, "asc" ]],
-      "pageLength": 25,
+      "pageLength": 10,
       "autoWidth": false,
       "responsive": true,
       "ajax": {
@@ -181,7 +183,7 @@
                   return meta.row + meta.settings._iDisplayStart + 1;
               }
           },
-          { "data": "username" },{ "data": "password" },{ "data": "hak_akses" },{ "data": "status" },
+          { "data": "nm_user" },{ "data": "username" },{ "data": "password" },{ "data": "hak_akses" },{ "data": "status" },
           { "data": null, 
             "render" : function(data, type, full, meta){
               // console.log(meta.row)

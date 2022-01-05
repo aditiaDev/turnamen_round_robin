@@ -42,7 +42,7 @@
                 </div>
               </div>
               <div class="card-footer justify-content-between">
-                <button type="button" class="btn btn-sm btn-warning">Batal</button>
+                <button type="button" class="btn btn-sm btn-warning" id="BTN_RESET">Reset</button>
                 <button type="button" id="BTN_SAVE" class="btn btn-sm btn-primary" style="float: right;">Simpan</button>
               </div>
             </div>
@@ -100,7 +100,7 @@
           console.log(data)
           if (data.status == "success") {
             toastr.info(data.message)
-
+            $("[name='id_event']").val(data.DOC_NO)
           }else{
             toastr.error(data.message)
           }
@@ -119,6 +119,11 @@
     }
 
     ACTION(urlPost, formData)
+  })
+
+  $("#BTN_RESET").click(function(){
+    $("#FRM_DATA")[0].reset()
+    $(".summernote").summernote("code", "")
   })
 
 </script>

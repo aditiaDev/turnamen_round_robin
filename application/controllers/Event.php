@@ -72,7 +72,7 @@ class Event extends CI_Controller {
               "deskripsi" => $this->input->post('deskripsi'),
             );
     $this->db->insert('tb_event', $data);
-    $output = array("status" => "success", "message" => "Data Berhasil Disimpan");
+    $output = array("status" => "success", "message" => "Data Berhasil Disimpan", "DOC_NO" => $kode);
     echo json_encode($output);
 
   }
