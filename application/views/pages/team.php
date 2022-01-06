@@ -23,6 +23,7 @@
                   <th>ID Team</th>
                   <th>Nama Team</th>
                   <th>Alamat</th>
+                  <th>Logo</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -42,7 +43,7 @@
     <div class="modal fade" id="modal_add">
       <div class="modal-dialog">
         <div class="modal-content">
-          <form id="FRM_DATA">
+          <form id="FRM_DATA" method="post" enctype="multipart/form-data">
             <div class="modal-header">
               <h4 class="modal-title">Data</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -63,6 +64,10 @@
                 <textarea class="form-control" name="alamat_team" ></textarea>
               </div>
               <div class="form-group">
+                <label>Logo Team</label>
+                <input type="file" name="logo" id="logo" accept="image/png, image/gif, image/jpeg">
+              </div>
+              <div class="form-group">
                 <label>User</label>
                 <select class="form-control select2" name="id_user">
                 </select>
@@ -70,7 +75,7 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="BTN_SAVE">Simpan</button>
+              <button type="submit" class="btn btn-primary" id="BTN_SAVE">Simpan</button>
             </div>
           </form>
         </div>
@@ -106,9 +111,9 @@
       $("#modal_add").modal('show')
     })
 
-    $("#BTN_SAVE").click(function(){
+    $("#FRM_DATA").on('submit', function(event){
       event.preventDefault();
-      var formData = $("#FRM_DATA").serialize();
+      let formData = new FormData(this);
       
       
       if(save_method == 'save') {
@@ -126,22 +131,31 @@
 
   function ACTION(urlPost, formData){
       $.ajax({
-          url: urlPost,
-          type: "POST",
-          data: formData,
-          dataType: "JSON",
-          success: function(data){
-            console.log(data)
-            if (data.status == "success") {
-              toastr.info(data.message)
-              
+        url: urlPost,
+        type: "POST",
+        data: formData,
+        beforeSend: function(){
+          $("#LOADER").show();
+        },
+        complete: function(){
+          $("#LOADER").hide();
+        },
+        processData : false,
+        cache: false,
+        contentType : false,
+        success: function(data){
+          data = JSON.parse(data)
+          console.log(data)
+          if (data.status == "success") {
+            toastr.info(data.message)
+            
 
-              REFRESH_DATA()
+            REFRESH_DATA()
 
-            }else{
-              toastr.error(data.message)
-            }
+          }else{
+            toastr.error(data.message)
           }
+        }
       })
   }
 
@@ -164,6 +178,15 @@
               }
           },
           { "data": "id_team" },{ "data": "nm_team" },{ "data": "alamat_team" },
+          { "data": "logo",
+            render: function (data, type, row, meta) {
+                if(data){
+                  return "<a target='_blank' href='<?php echo base_url() ?>assets/images/team/"+data+"'><img  style='max-width: 120px;' class='img-fluid' src='<?php echo base_url() ?>assets/images/team/"+data+"' ></a>";
+                }else{
+                  return "No File"
+                }
+            }
+          },
           { "data": null, 
             "render" : function(data, type, full, meta){
               // console.log(meta.row)

@@ -39,9 +39,15 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo base_url("event/")?>" class="nav-link">
+              <a href="<?php echo base_url("peserta/")?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Data Peserta</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url("grup/")?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Data Grup</p>
               </a>
             </li>
           </ul>

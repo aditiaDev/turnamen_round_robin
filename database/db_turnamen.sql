@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Jan 2022 pada 23.27
--- Versi server: 10.4.10-MariaDB
--- Versi PHP: 7.3.12
+-- Waktu pembuatan: 06 Jan 2022 pada 09.36
+-- Versi server: 10.4.13-MariaDB
+-- Versi PHP: 7.3.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -68,8 +67,20 @@ INSERT INTO `tb_event` (`id_event`, `nm_event`, `deskripsi`, `tgl_event`, `tgl_s
 
 CREATE TABLE `tb_grup` (
   `id_grup` int(11) NOT NULL,
-  `nm_grup` varchar(25) DEFAULT NULL,
-  `jml_team` int(11) DEFAULT NULL
+  `nm_grup` varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tb_jadwal_grup`
+--
+
+CREATE TABLE `tb_jadwal_grup` (
+  `id_jadwal` int(11) NOT NULL,
+  `id_team` varchar(25) DEFAULT NULL,
+  `id_event` varchar(25) DEFAULT NULL,
+  `id_grup` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -157,6 +168,7 @@ CREATE TABLE `tb_team` (
   `id_team` varchar(25) NOT NULL,
   `nm_team` varchar(50) DEFAULT NULL,
   `alamat_team` varchar(255) DEFAULT NULL,
+  `logo` text NOT NULL,
   `id_user` varchar(25) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -164,22 +176,23 @@ CREATE TABLE `tb_team` (
 -- Dumping data untuk tabel `tb_team`
 --
 
-INSERT INTO `tb_team` (`id_team`, `nm_team`, `alamat_team`, `id_user`) VALUES
-('TM2022010001', 'EVOS Esports', 'Jakarta', 'US2022010002'),
-('TM2022010002', 'Blacklist International', 'Semarang', 'US2022010003'),
-('TM2022010003', 'ONIC PH', 'Kudus', 'US2022010004'),
-('TM2022010004', 'Onic Esports', 'Pati', 'US2022010005'),
-('TM2022010005', 'RRQ Hoshi', 'Demak', 'US2022010006'),
-('TM2022010006', 'Team SMG', 'Pati', 'US2022010007'),
-('TM2022010007', 'Todak', 'Kudus', 'US2022010008'),
-('TM2022010008', 'RSG SG', 'Jepara', 'US2022010009'),
-('TM2022010009', 'RED Canids', 'Kendal', 'US2022010010'),
-('TM2022010010', 'Keyd Stars', 'Purwodadi', 'US2022010011'),
-('TM2022010011', 'See You Soon', 'Semarang', 'US2022010012'),
-('TM2022010012', 'Natus Vincere/Na\'vi', 'Pati', 'US2022010013'),
-('TM2022010013', 'Bedel', 'Jepara', 'US2022010014'),
-('TM2022010014', 'Malvinas Gaming', 'Kudus', 'US2022010015'),
-('TM2022010015', 'BloodThirstyKings', 'Kudus', 'US2022010016');
+INSERT INTO `tb_team` (`id_team`, `nm_team`, `alamat_team`, `logo`, `id_user`) VALUES
+('TM2022010001', 'EVOS Esports', 'Jakarta', '', 'US2022010002'),
+('TM2022010002', 'Blacklist International', 'Semarang', '', 'US2022010003'),
+('TM2022010003', 'ONIC PH', 'Kudus', '', 'US2022010004'),
+('TM2022010004', 'Onic Esports', 'Pati', '', 'US2022010005'),
+('TM2022010005', 'RRQ Hoshi', 'Demak', '', 'US2022010006'),
+('TM2022010006', 'Team SMG', 'Pati', '', 'US2022010007'),
+('TM2022010007', 'Todak', 'Kudus', '', 'US2022010008'),
+('TM2022010008', 'RSG SG', 'Jepara', '', 'US2022010009'),
+('TM2022010009', 'RED Canids', 'Kendal', '', 'US2022010010'),
+('TM2022010010', 'Keyd Stars', 'Purwodadi', '', 'US2022010011'),
+('TM2022010011', 'See You Soon', 'Semarang', '', 'US2022010012'),
+('TM2022010012', 'Natus Vincere/Na\'vi', 'Pati', '', 'US2022010013'),
+('TM2022010013', 'Bedel', 'Jepara', '', 'US2022010014'),
+('TM2022010014', 'Malvinas Gaming', 'Kudus', '', 'US2022010015'),
+('TM2022010015', 'BloodThirstyKings', 'Kudus', '', 'US2022010016'),
+('TM2022010016', 'sdfdsfd', 'sdfsdf', '1641452503864.png', 'US2022010017');
 
 -- --------------------------------------------------------
 
@@ -216,7 +229,8 @@ INSERT INTO `tb_user` (`id_user`, `nm_user`, `username`, `password`, `hak_akses`
 ('US2022010013', 'Natus Vincere/Na\'vi', 'team12', 'team12', 'PESERTA', 'AKTIF'),
 ('US2022010014', 'Bedel', 'team13', 'team13', 'PESERTA', 'AKTIF'),
 ('US2022010015', 'Malvinas Gaming', 'team14', 'team14', 'PESERTA', 'AKTIF'),
-('US2022010016', 'BloodThirstyKings', 'team15', 'team15', 'PESERTA', 'AKTIF');
+('US2022010016', 'BloodThirstyKings', 'team15', 'team15', 'PESERTA', 'AKTIF'),
+('US2022010017', 'sdfsdf', 'sdfsf', 'sdfsf', 'PESERTA', 'AKTIF');
 
 --
 -- Indexes for dumped tables
@@ -241,6 +255,12 @@ ALTER TABLE `tb_event`
 --
 ALTER TABLE `tb_grup`
   ADD PRIMARY KEY (`id_grup`);
+
+--
+-- Indeks untuk tabel `tb_jadwal_grup`
+--
+ALTER TABLE `tb_jadwal_grup`
+  ADD PRIMARY KEY (`id_jadwal`);
 
 --
 -- Indeks untuk tabel `tb_juara`

@@ -30,6 +30,27 @@ class Team extends CI_Controller {
     echo json_encode($data);
   }
 
+  private function _do_upload(){
+		$config['upload_path']          = 'assets/images/team/';
+    $config['allowed_types']        = 'gif|jpg|jpeg|png';
+    $config['max_size']             = 5000; //set max size allowed in Kilobyte
+    $config['max_width']            = 4000; // set max width image allowed
+    $config['max_height']           = 4000; // set max height allowed
+    $config['file_name']            = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
+
+    $this->load->library('upload', $config);
+
+    if(!$this->upload->do_upload('logo')) //upload and validate
+    {
+      $data['inputerror'] = 'logo';
+			$data['message'] = 'Upload error: '.$this->upload->display_errors('',''); //show ajax error
+			$data['status'] = FALSE;
+			echo json_encode($data);
+			exit();
+		}
+		return $this->upload->data('file_name');
+	}
+
   public function saveData(){
 
     $this->load->library('form_validation');
@@ -56,6 +77,12 @@ class Team extends CI_Controller {
               "alamat_team" => $this->input->post('alamat_team'),
               "id_user" => $this->input->post('id_user'),
             );
+
+    if(!empty($_FILES['logo']['name'])){
+      $upload = $this->_do_upload();
+      $data['logo'] = $upload;
+    }
+
     $this->db->insert('tb_team', $data);
     $output = array("status" => "success", "message" => "Data Berhasil Disimpan", "DOC_NO" => $kode);
     echo json_encode($output);
