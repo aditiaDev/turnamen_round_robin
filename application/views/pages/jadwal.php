@@ -11,7 +11,7 @@
         <div class="col-4">
           <div class="card card-dark" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Input Grup</h3>
+              <h3 class="card-title">Atur Pembagian Grup</h3>
             </div>
 
               <form id="FRM_DATA" role="form" method="POST">
@@ -38,7 +38,7 @@
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-dark" id="BTN_PROSES" >Proses</button>
+                  <button type="button" class="btn btn-dark" id="BTN_PROSES" >Proses</button>
                 </div>
               </form>
 
@@ -48,7 +48,7 @@
         <div class="col-8">
           <div class="card card-dark" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Atur Jadwal</h3>
+              <h3 class="card-title">Pembagian Grup</h3>
             </div>
 
             <div class="card-body">
@@ -58,7 +58,6 @@
                     <th width="10%">No</th>
                     <th >Grup</th>
                     <th >Team</th>
-                    <th >Jadwal Pertandingan</th>
                     <th style="text-align:center">Action</th>
                   </tr>
                 </thead>
@@ -138,6 +137,9 @@
       $("[name='id_event']").val(Rowdata.id_event);
       $("[name='nm_event']").val(Rowdata.nm_event);
       $("[name='jml_team']").val(Rowdata.jml_team);
+
+      REFRESH_DATA()
+
       $('#modal_event').modal('hide');
   });
 
@@ -150,16 +152,56 @@
 
   $("#BTN_PROSES").click(function(){
     $.ajax({
-      url: "<?php echo site_url('jadwal/aturJadwal') ?>",
+      url: "<?php echo site_url('jadwal/PembagianGrup') ?>",
       type: "POST",
+      dataType: "JSON",
       data: {
         id_event: $("[name='id_event']").val(),
         jmlTeamGrup: $("[name='jml_team_grup']").val(),
         jmlGrup: $("[name='jml_grup']").val()
       },
       success: function(data){
-        console.log(data)
+        if (data.status == "success") {
+          toastr.info(data.message)
+          REFRESH_DATA()
+
+        }else{
+          toastr.error(data.message)
+        }
       }
     })
   })
+
+  function REFRESH_DATA(){
+    $('#tb_data').DataTable().destroy();
+    var tb_data = $("#tb_data").DataTable({
+      "order": [[ 0, "asc" ]],
+      "pageLength": 10,
+      "autoWidth": false,
+      "responsive": true,
+      "ajax": {
+          "url": "<?php echo site_url('jadwal/getPembagianGrup') ?>",
+          "type": "POST",
+          "data": {
+            id_event: $("[name='id_event']").val()
+          }
+      },
+      "columns": [
+          {
+              "data": null,
+              render: function (data, type, row, meta) {
+                  return meta.row + meta.settings._iDisplayStart + 1;
+              }
+          },
+          { "data": "nm_grup" },{ "data": "nm_team" },
+          { "data": null, 
+            "render" : function(data, type, full, meta){
+              // console.log(meta.row)
+              return "<button class='btn btn-sm btn-danger' onclick='deleteData(\""+data.id_jadwal+"\");'><i class='fas fa-trash'></i> Delete</button>"
+            },
+            className: "text-center"
+          },
+      ]
+    })
+  }
 </script>
