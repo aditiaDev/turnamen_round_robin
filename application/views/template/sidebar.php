@@ -64,7 +64,7 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="?page=aturjadwal&amp;set=grup" class="nav-link">
+              <a href="<?php echo base_url("jadwal/")?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Atur Jadwal Grup</p>
               </a>

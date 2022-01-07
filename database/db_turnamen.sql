@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 06 Jan 2022 pada 09.36
+-- Waktu pembuatan: 07 Jan 2022 pada 09.10
 -- Versi server: 10.4.13-MariaDB
 -- Versi PHP: 7.3.19
 
@@ -69,6 +69,23 @@ CREATE TABLE `tb_grup` (
   `id_grup` int(11) NOT NULL,
   `nm_grup` varchar(25) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_grup`
+--
+
+INSERT INTO `tb_grup` (`id_grup`, `nm_grup`) VALUES
+(1, 'Grup A'),
+(2, 'Grup B'),
+(3, 'Grup C'),
+(4, 'Grup D'),
+(5, 'Grup E'),
+(6, 'Grup F'),
+(7, 'Grup G'),
+(8, 'Grup H'),
+(9, 'Grup I'),
+(10, 'Grup J'),
+(11, 'test');
 
 -- --------------------------------------------------------
 
@@ -314,7 +331,7 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT untuk tabel `tb_grup`
 --
 ALTER TABLE `tb_grup`
-  MODIFY `id_grup` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_grup` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_juara`

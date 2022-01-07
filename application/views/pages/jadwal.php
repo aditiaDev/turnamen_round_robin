@@ -17,12 +17,28 @@
               <form id="FRM_DATA" role="form" method="POST">
                 <div class="card-body">
                   <div class="form-group">
-                    <label>Nama Grup</label>
-                    <input type="text" class="form-control" name="nm_grup" placeholder="Nama Grup" >
+                    <label>Nama Event</label>
+                    <div class="row">
+                      <input type="hidden" class="form-control" name="id_event" readonly >
+                      <input type="text" class="form-control" name="nm_event" readonly style="width: 275px;margin-right: 10px;" placeholder="Nama Event" >
+                      <button type="button" id="BTN_EVENT" class="btn btn-sm btn-default"><i class="fas fa-list"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Jumlah Team</label>
+                    <input type="text" class="form-control" name="jml_team" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label>Jumlah Team per Grup</label>
+                    <input type="text" class="form-control" name="jml_team_grup" onchange="aturJadwal()">
+                  </div>
+                  <div class="form-group">
+                    <label>Jumlah Grup</label>
+                    <input type="text" class="form-control" name="jml_grup" readonly>
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-dark" id="BTN_SAVE" name="simpan_grup">Simpan</button>
+                  <button type="submit" class="btn btn-dark" id="BTN_PROSES" >Proses</button>
                 </div>
               </form>
 
@@ -32,15 +48,17 @@
         <div class="col-8">
           <div class="card card-dark" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Data Grup</h3>
+              <h3 class="card-title">Atur Jadwal</h3>
             </div>
 
             <div class="card-body">
               <table width="100%" class="table table-bordered table-hover" id="tb_data">
                 <thead>
                   <tr>
-                    <th width="10%">ID.</th>
-                    <th >Nama Grup</th>
+                    <th width="10%">No</th>
+                    <th >Grup</th>
+                    <th >Team</th>
+                    <th >Jadwal Pertandingan</th>
                     <th style="text-align:center">Action</th>
                   </tr>
                 </thead>
@@ -71,6 +89,7 @@
                   <th>ID</th>
                   <th>Nama Event</th>
                   <th>Tanggal Event</th>
+                  <th>Jumlah Team</th>
                   <th>Status Event</th>
                 </thead>
               </table>
@@ -93,89 +112,54 @@
 <script src="<?php echo base_url('/assets/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
 <script src="<?php echo base_url('/assets/adminlte/plugins/select2/js/select2.full.min.js'); ?>"></script>
 <script>
-  var save_method= 'save';
-  var id_data;
+  $("#BTN_EVENT").click(function(){
+    tb_event = $('#tb_event').DataTable( {
+        "order": [[ 1, "asc" ]],
+        "pageLength": 25,
+        "bInfo" : false,
+        "bDestroy": true,
+        "select": true,
+        "ajax": {
+            "url": "<?php echo site_url('jadwal/getDataEvent') ?>",
+            "type": "POST",
+        },
+        "columns": [
+            { "data": "id_event" },{ "data": "nm_event" }
+            ,{ "data": "tgl_event" },{ "data": "jml_team" },{ "data": "status" },
+        ]
+    });
 
-  $(function(){
-    REFRESH_DATA()
-
-  })
-  
-  $(".select2").select2({
-    theme: 'bootstrap4'
-  })
-
-  $("#BTN_SAVE").click(function(){
-    event.preventDefault();
-    var formData = $("#FRM_DATA").serialize();
-    
-    
-    if(save_method == 'save') {
-        urlPost = "<?php echo site_url('grup/saveData') ?>";
-    }else{
-        urlPost = "<?php echo site_url('grup/updateData') ?>";
-        formData+="&id_data="+id_data
-    }
-
-    ACTION(urlPost, formData)
+    $("#modal_event").modal('show')
   })
 
-  function ACTION(urlPost, formData){
+  $('body').on( 'dblclick', '#tb_event tbody tr', function (e) {
+      var Rowdata = tb_event.row( this ).data();
+
+      $("[name='id_event']").val(Rowdata.id_event);
+      $("[name='nm_event']").val(Rowdata.nm_event);
+      $("[name='jml_team']").val(Rowdata.jml_team);
+      $('#modal_event').modal('hide');
+  });
+
+  function aturJadwal(){
+    var jmlTeam = $("[name='jml_team']").val()
+    var jmlTeamGrup = $("[name='jml_team_grup']").val()
+    var result = parseFloat(jmlTeam/jmlTeamGrup)
+    $("[name='jml_grup']").val(Math.floor(result))
+  }
+
+  $("#BTN_PROSES").click(function(){
     $.ajax({
-        url: urlPost,
-        type: "POST",
-        data: formData,
-        dataType: "JSON",
-        success: function(data){
-          console.log(data)
-          if (data.status == "success") {
-            toastr.info(data.message)
-            REFRESH_DATA()
-            $("#FRM_DATA")[0].reset()
-          }else{
-            toastr.error(data.message)
-          }
-        }
-    })
-  }
-
-  function REFRESH_DATA(){
-    $('#tb_data').DataTable().destroy();
-    var tb_data = $("#tb_data").DataTable({
-      "order": [[ 0, "asc" ]],
-      "pageLength": 25,
-      "autoWidth": false,
-      "responsive": true,
-      "ajax": {
-          "url": "<?php echo site_url('grup/getAllData') ?>",
-          "type": "POST"
+      url: "<?php echo site_url('jadwal/aturJadwal') ?>",
+      type: "POST",
+      data: {
+        id_event: $("[name='id_event']").val(),
+        jmlTeamGrup: $("[name='jml_team_grup']").val(),
+        jmlGrup: $("[name='jml_grup']").val()
       },
-      "columns": [
-          { "data": "id_grup" },{ "data": "nm_grup" },
-          { "data": null, 
-            "render" : function(data, type, full, meta){
-              // console.log(meta.row)
-              return "<button class='btn btn-sm btn-warning' onclick='editData("+JSON.stringify(data)+",\""+meta.row+"\");'><i class='fas fa-edit'></i> Edit</button> "+
-                "<button class='btn btn-sm btn-danger' onclick='deleteData(\""+data.id_grup+"\");'><i class='fas fa-trash'></i> Delete</button>"
-            },
-            className: "text-center"
-          },
-      ]
+      success: function(data){
+        console.log(data)
+      }
     })
-  }
-
-  function editData(data, index){
-    save_method = "edit"
-    id_data = data.id_grup;
-    $("[name='nm_grup']").val(data.nm_grup)
-  }
-
-  function deleteData(id){
-    if(!confirm('Delete this data?')) return
-
-    urlPost = "<?php echo site_url('grup/deleteData') ?>";
-    formData = "id_data="+id
-    ACTION(urlPost, formData)
-  }
-
+  })
 </script>
