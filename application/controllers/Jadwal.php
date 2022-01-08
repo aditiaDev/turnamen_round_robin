@@ -30,6 +30,17 @@ class Jadwal extends CI_Controller {
   	echo json_encode($data);
   }
 
+  public function getEventPertandingan(){
+    $data['data'] = $this->db->query("SELECT a.id_event, a.nm_event, 
+    DATE_FORMAT(a.tgl_event, '%d-%b-%Y') tgl_event, a.status
+    FROM tb_event a 
+    WHERE id_event IN(
+      SELECT DISTINCT id_event FROM tb_jadwal_grup
+    )
+    ORDER BY tgl_event DESC")->result();
+  	echo json_encode($data);
+  }
+
   public function PembagianGrup(){
 
     $this->db->where('id_event', $this->input->post('id_event'));
@@ -74,6 +85,82 @@ class Jadwal extends CI_Controller {
     AND a.id_event='EV2022010001'
     ORDER BY a.id_grup")->result();
   	echo json_encode($data);
+  }
+
+  public function pertandingan(){
+    $this->load->view('template/header');
+    $this->load->view('template/sidebar');
+    $this->load->view('pages/pertandingan');
+    $this->load->view('template/footer');
+  }
+
+  public function showJadwal(){
+    $id_event = $this->input->post('id_event');
+    $arr=array();
+    $i=0;
+    $j=0;
+    $dtGrup = $this->db->query("
+        SELECT * FROM tb_grup WHERE id_grup IN(
+          SELECT DISTINCT id_grup FROM tb_jadwal_grup WHERE id_event='".$id_event."'
+        )
+        ORDER BY id_grup
+    ")->result_array();
+
+    foreach($dtGrup as $grup){
+      $dtTeam = $this->db->query("
+        SELECT id_team, nm_team FROM tb_team WHERE id_team IN(
+          SELECT id_team FROM tb_jadwal_grup WHERE id_event='".$id_event."'
+          AND id_grup='".$grup['id_grup']."'
+        )
+      ")->result_array();
+
+      foreach ($dtTeam as $team) {
+        foreach ($dtTeam as $teams) {
+          if ($team <> $teams) {
+            // echo "<br>Grup".$grup['id_grup']." - Team: ".$data['id_team']."-".$datas['id_team'];
+
+            $unik = 'VS'.date('Ym');
+            $kode = $this->db->query("select MAX(id_pertandingan) LAST_NO from tb_pertandingan WHERE id_pertandingan LIKE '".$unik."%'")->row()->LAST_NO;
+            
+            $urutan = (int) substr($kode, -5);
+            $urutan++;
+            $kode = $unik . sprintf("%05s", $urutan);
+
+            $data = array(
+                      "id_pertandingan" => $kode,
+                      "id_grup" => $grup['id_grup'],
+                      "id_event" => $id_event,
+                    );
+            $this->db->insert('tb_pertandingan', $data);
+
+            $data = array(
+                      "id_pertandingan" => $kode,
+                      "id_team" => $team['id_team'],
+                    );
+            $this->db->insert('tb_dtl_pertandingan', $data);
+
+            $data = array(
+                      "id_pertandingan" => $kode,
+                      "id_team" => $teams['id_team'],
+                    );
+            $this->db->insert('tb_dtl_pertandingan', $data);
+            
+            $arr[$j]['id_grup']=$grup['id_grup'];
+            $arr[$j]['nm_grup']=$grup['nm_grup'];
+            $arr[$j]['detail'][$i]['id_team1']=$team['id_team'];
+            $arr[$j]['detail'][$i]['nm_team1']=$team['nm_team'];
+            $arr[$j]['detail'][$i]['id_team2']=$teams['id_team'];
+            $arr[$j]['detail'][$i]['nm_team2']=$teams['nm_team'];
+            $i++;
+          }
+          
+        }
+      }
+      $j++;
+    }
+
+    echo json_encode($arr);
+
   }
 
 }

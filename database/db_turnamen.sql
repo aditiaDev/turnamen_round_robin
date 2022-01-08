@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 07 Jan 2022 pada 09.10
--- Versi server: 10.4.13-MariaDB
--- Versi PHP: 7.3.19
+-- Waktu pembuatan: 08 Jan 2022 pada 15.41
+-- Versi server: 10.4.10-MariaDB
+-- Versi PHP: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -99,6 +100,27 @@ CREATE TABLE `tb_jadwal_grup` (
   `id_event` varchar(25) DEFAULT NULL,
   `id_grup` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_jadwal_grup`
+--
+
+INSERT INTO `tb_jadwal_grup` (`id_jadwal`, `id_team`, `id_event`, `id_grup`) VALUES
+(62, 'TM2022010014', 'EV2022010001', 1),
+(63, 'TM2022010008', 'EV2022010001', 1),
+(64, 'TM2022010001', 'EV2022010001', 1),
+(65, 'TM2022010002', 'EV2022010001', 1),
+(66, 'TM2022010015', 'EV2022010001', 1),
+(67, 'TM2022010005', 'EV2022010001', 2),
+(68, 'TM2022010007', 'EV2022010001', 2),
+(69, 'TM2022010010', 'EV2022010001', 2),
+(70, 'TM2022010003', 'EV2022010001', 2),
+(71, 'TM2022010012', 'EV2022010001', 2),
+(72, 'TM2022010004', 'EV2022010001', 3),
+(73, 'TM2022010006', 'EV2022010001', 3),
+(74, 'TM2022010011', 'EV2022010001', 3),
+(75, 'TM2022010013', 'EV2022010001', 3),
+(76, 'TM2022010009', 'EV2022010001', 3);
 
 -- --------------------------------------------------------
 
@@ -205,7 +227,7 @@ INSERT INTO `tb_team` (`id_team`, `nm_team`, `alamat_team`, `logo`, `id_user`) V
 ('TM2022010009', 'RED Canids', 'Kendal', '', 'US2022010010'),
 ('TM2022010010', 'Keyd Stars', 'Purwodadi', '', 'US2022010011'),
 ('TM2022010011', 'See You Soon', 'Semarang', '', 'US2022010012'),
-('TM2022010012', 'Natus Vincere/Na\'vi', 'Pati', '', 'US2022010013'),
+('TM2022010012', 'Natus Vincere/Navi', 'Pati', '', 'US2022010013'),
 ('TM2022010013', 'Bedel', 'Jepara', '', 'US2022010014'),
 ('TM2022010014', 'Malvinas Gaming', 'Kudus', '', 'US2022010015'),
 ('TM2022010015', 'BloodThirstyKings', 'Kudus', '', 'US2022010016'),
@@ -328,10 +350,22 @@ ALTER TABLE `tb_user`
 --
 
 --
+-- AUTO_INCREMENT untuk tabel `tb_dtl_pertandingan`
+--
+ALTER TABLE `tb_dtl_pertandingan`
+  MODIFY `id_dtl_pertandingan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+
+--
 -- AUTO_INCREMENT untuk tabel `tb_grup`
 --
 ALTER TABLE `tb_grup`
   MODIFY `id_grup` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT untuk tabel `tb_jadwal_grup`
+--
+ALTER TABLE `tb_jadwal_grup`
+  MODIFY `id_jadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_juara`
