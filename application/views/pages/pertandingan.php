@@ -2,8 +2,6 @@
 <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css'); ?>">
 <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css'); ?>">
 <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css'); ?>">
-<link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/select2/css/select2.min.css'); ?>">
-<link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css'); ?>">
 <div class="content-wrapper">  
   <section class="content">
     <div class="container-fluid">
@@ -26,7 +24,8 @@
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="button" class="btn btn-dark" id="BTN_PROSES" >Proses</button>
+                  <button type="button" class="btn btn-sm btn-dark" id="BTN_PROSES" >Buat Jadwal</button>
+                  <button type="button" class="btn btn-sm btn-info" id="BTN_UPDATE" style="float: right;">Update Waktu Pertandingan</button>
                 </div>
               </form>
 
@@ -34,6 +33,10 @@
         </div>
 
         <!-- /.col -->
+      </div>
+
+      <div class="row" id="dtJadwal">
+        
       </div>
     </div>
 
@@ -73,8 +76,10 @@
 
 <!-- jQuery -->
 <script src="<?php echo base_url('/assets/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
-<script src="<?php echo base_url('/assets/adminlte/plugins/select2/js/select2.full.min.js'); ?>"></script>
 <script>
+  
+    
+
     $("#BTN_EVENT").click(function(){
       tb_event = $('#tb_event').DataTable( {
           "order": [[ 1, "asc" ]],
@@ -106,6 +111,10 @@
     });
 
     $("#BTN_PROSES").click(function(){
+      if($("[name='id_event']").val() == ""){
+        alert("Pilih Event Pertandingan")
+        return
+      }
       $.ajax({
         url: "<?php echo site_url('jadwal/showJadwal') ?>",
         type: "POST",
@@ -114,7 +123,45 @@
           id_event: $("[name='id_event']").val(),
         },
         success: function(data){
-          console.log(data)
+          
+          var rowData=''
+          $.each(data, function(index, value){
+            console.log(value)
+            
+            rowData += '<div class="col-6">'+
+                          '<div class="card card-dark" >'+
+                            '<div class="card-header">'+
+                              '<h3 class="card-title">'+value['nm_grup']+'</h3>'+
+                            '</div>'+
+                              '<div class="card-body">'+
+                                '<table class="table table-bordered">'+
+                                  '<thead>'+
+                                    '<th>Team</th>'+
+                                    '<th>Tanggal</th>'+
+                                    '<th>Waktu</th>'+
+                                  '</thead>'+
+                                  '<tbody>';
+            $.each(value['detail'], function(index, val){
+              rowData += '<tr>'+
+                            '<td>'+val['nm_team1']+' VS '+val['nm_team2']+'</td>'+
+                            '<td><input type="text" name="tgl_pertandingan[]" class="form-control datepicker"></td>'+
+                            '<td><input type="time" name="waktu_pertandingan" class="form-control"></td>'+
+                          '</tr>'
+            })
+
+
+                        rowData +='</tbody>'+
+                                '</table>'+
+                              '</div>'+
+                          '</div>'+
+                        '</div>';
+                
+          });
+          $("#dtJadwal").html(rowData);
+          $(".datepicker").datepicker({
+            autoclose: true,
+            format: 'dd-M-yyyy'
+          });
         }
       })
     })
