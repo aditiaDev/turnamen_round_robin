@@ -85,7 +85,7 @@ class Jadwal extends CI_Controller {
     $data['data'] = $this->db->query("SELECT a.*, b.nm_team, c.nm_grup FROM tb_jadwal_grup a, tb_team b, tb_grup c
     WHERE a.id_team=b.id_team
     AND a.id_grup=c.id_grup
-    AND a.id_event='EV2022010001'
+    AND a.id_event='".$this->input->post('id_event')."'
     ORDER BY a.id_grup")->result();
   	echo json_encode($data);
   }
@@ -146,8 +146,10 @@ class Jadwal extends CI_Controller {
                     );
             $this->db->insert('tb_dtl_pertandingan', $data);
             
+            
             $arr[$j]['id_grup']=$grup['id_grup'];
             $arr[$j]['nm_grup']=$grup['nm_grup'];
+            $arr[$j]['detail'][$i]['id_pertandingan']=$kode;
             $arr[$j]['detail'][$i]['id_team1']=$team['id_team'];
             $arr[$j]['detail'][$i]['nm_team1']=$team['nm_team'];
             $arr[$j]['detail'][$i]['id_team2']=$teams['id_team'];
@@ -162,6 +164,86 @@ class Jadwal extends CI_Controller {
 
     echo json_encode($arr);
 
+  }
+
+  public function updateJadwal(){
+
+    foreach($this->input->post('id_pertandingan') as $key => $each){
+      $data = array(
+        "tgl_pertandingan" => date("Y-m-d H:i:s", strtotime($this->input->post('tgl_pertandingan')[$key].' '.$this->input->post('waktu_pertandingan')[$key])),
+      );
+      $this->db->where('id_pertandingan', $this->input->post('id_pertandingan')[$key]);
+      $this->db->update('tb_pertandingan', $data);
+      // echo date("Y-m-d H:i:s", strtotime($this->input->post('tgl_pertandingan')[$key].' '.$this->input->post('waktu_pertandingan')[$key]));
+    }
+
+    $output = array("status" => "success", "message" => "Jadwal Berhasil di Update");
+    echo json_encode($output);
+
+  }
+
+  public function jadwalPertandingan(){
+    $this->load->view('template/header');
+    $this->load->view('template/sidebar');
+    $this->load->view('pages/jadwalPertandingan');
+    $this->load->view('template/footer');
+  }
+
+  public function getJadwalPertandingan(){
+    $data['data'] = $this->db->query("
+        SELECT TB1.id_pertandingan, TB1.id_event, TB1.id_grup, TB1.nm_grup, 
+        DATE_FORMAT(TB1.tgl_pertandingan, '%d-%b-%Y') tgl_pertandingan,
+        DATE_FORMAT(TB1.tgl_pertandingan, '%H:%i') waktu_pertandingan,
+        CONCAT(TB2.nm_team,' VS ',TB3.nm_team) nm_team FROM(
+          SELECT a.id_pertandingan, a.tgl_pertandingan, a.id_grup,b.nm_grup, a.id_event,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1) team1,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1,1) team2
+          FROM tb_pertandingan a, tb_grup b
+          WHERE a.id_grup=b.id_grup
+        ) TB1, tb_team TB2, tb_team TB3
+        WHERE TB1.team1=TB2.id_team
+        AND TB1.team2=TB3.id_team
+        AND TB1.id_event='".$this->input->post('id_event')."'
+    ")->result();
+  	echo json_encode($data);
+  }
+
+  public function getEventTanding(){
+    $data['data'] = $this->db->query("SELECT a.id_event, a.nm_event, 
+    DATE_FORMAT(a.tgl_event, '%d-%b-%Y') tgl_event, a.status
+    FROM tb_event a 
+    WHERE id_event IN(
+      SELECT DISTINCT id_event FROM tb_pertandingan
+    )
+    ORDER BY tgl_event DESC")->result();
+  	echo json_encode($data);
+  }
+
+  public function updateJadwalPertandingan(){
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('id_pertandingan', 'ID Pertandingan', 'required');
+    $this->form_validation->set_rules('tgl_pertandingan', 'Tanggal Pertandingan', 'required');
+    $this->form_validation->set_rules('waktu_pertandingan', 'Waktu Pertandingan', 'required');
+
+    if($this->form_validation->run() == FALSE){
+      // echo validation_errors();
+      $output = array("status" => "error", "message" => validation_errors());
+      echo json_encode($output);
+      return false;
+    }
+
+    $data = array(
+      "tgl_pertandingan" => date("Y-m-d H:i:s", strtotime($this->input->post('tgl_pertandingan').' '.$this->input->post('waktu_pertandingan'))),
+    );
+    $this->db->where('id_pertandingan', $this->input->post('id_pertandingan'));
+    $this->db->update('tb_pertandingan', $data);
+    if($this->db->error()['message'] != ""){
+      $output = array("status" => "error", "message" => $this->db->error()['message']);
+      echo json_encode($output);
+      return false;
+    }
+    $output = array("status" => "success", "message" => "Data Berhasil di Update");
+    echo json_encode($output);
   }
 
 }

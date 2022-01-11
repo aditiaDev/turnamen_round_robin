@@ -12,7 +12,7 @@
               <h3 class="card-title">Atur Jadwal Pertandingan</h3>
             </div>
 
-              <form id="FRM_DATA" role="form" method="POST">
+              
                 <div class="card-body">
                   <div class="form-group">
                     <label>Nama Event</label>
@@ -27,7 +27,7 @@
                   <button type="button" class="btn btn-sm btn-dark" id="BTN_PROSES" >Buat Jadwal</button>
                   <button type="button" class="btn btn-sm btn-info" id="BTN_UPDATE" style="float: right;">Update Waktu Pertandingan</button>
                 </div>
-              </form>
+              
 
           </div>
         </div>
@@ -35,9 +35,11 @@
         <!-- /.col -->
       </div>
 
-      <div class="row" id="dtJadwal">
-        
-      </div>
+      <form id="FRM_DATA">
+        <div class="row" id="dtJadwal">
+          
+        </div>
+      </form>
     </div>
 
     <div class="modal fade" id="modal_event">
@@ -143,9 +145,9 @@
                                   '<tbody>';
             $.each(value['detail'], function(index, val){
               rowData += '<tr>'+
-                            '<td>'+val['nm_team1']+' VS '+val['nm_team2']+'</td>'+
+                            '<td><input type="hidden" name="id_pertandingan[]" value="'+val['id_pertandingan']+'" >'+val['nm_team1']+' VS '+val['nm_team2']+'</td>'+
                             '<td><input type="text" name="tgl_pertandingan[]" class="form-control datepicker"></td>'+
-                            '<td><input type="time" name="waktu_pertandingan" class="form-control"></td>'+
+                            '<td><input type="time" name="waktu_pertandingan[]" class="form-control"></td>'+
                           '</tr>'
             })
 
@@ -162,6 +164,24 @@
             autoclose: true,
             format: 'dd-M-yyyy'
           });
+        }
+      })
+    })
+
+    $("#BTN_UPDATE").click(function(){
+      var formData = $("#FRM_DATA").serialize();
+      $.ajax({
+        url: "<?php echo site_url('jadwal/updateJadwal') ?>",
+        type: "POST",
+        dataType: "JSON",
+        data: formData,
+        success: function(data){
+          if (data.status == "success") {
+            toastr.info(data.message)
+
+          }else{
+            toastr.error(data.message)
+          }
         }
       })
     })
