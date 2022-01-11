@@ -37,6 +37,9 @@ class Jadwal extends CI_Controller {
     WHERE id_event IN(
       SELECT DISTINCT id_event FROM tb_jadwal_grup
     )
+    AND id_event NOT IN(
+      SELECT DISTINCT id_event FROM tb_pertandingan
+    )
     ORDER BY tgl_event DESC")->result();
   	echo json_encode($data);
   }
@@ -117,31 +120,31 @@ class Jadwal extends CI_Controller {
       foreach ($dtTeam as $team) {
         foreach ($dtTeam as $teams) {
           if ($team <> $teams) {
-            // $unik = 'VS'.date('Ym');
-            // $kode = $this->db->query("select MAX(id_pertandingan) LAST_NO from tb_pertandingan WHERE id_pertandingan LIKE '".$unik."%'")->row()->LAST_NO;
+            $unik = 'VS'.date('Ym');
+            $kode = $this->db->query("select MAX(id_pertandingan) LAST_NO from tb_pertandingan WHERE id_pertandingan LIKE '".$unik."%'")->row()->LAST_NO;
             
-            // $urutan = (int) substr($kode, -5);
-            // $urutan++;
-            // $kode = $unik . sprintf("%05s", $urutan);
+            $urutan = (int) substr($kode, -5);
+            $urutan++;
+            $kode = $unik . sprintf("%05s", $urutan);
 
-            // $data = array(
-            //           "id_pertandingan" => $kode,
-            //           "id_grup" => $grup['id_grup'],
-            //           "id_event" => $id_event,
-            //         );
-            // $this->db->insert('tb_pertandingan', $data);
+            $data = array(
+                      "id_pertandingan" => $kode,
+                      "id_grup" => $grup['id_grup'],
+                      "id_event" => $id_event,
+                    );
+            $this->db->insert('tb_pertandingan', $data);
 
-            // $data = array(
-            //           "id_pertandingan" => $kode,
-            //           "id_team" => $team['id_team'],
-            //         );
-            // $this->db->insert('tb_dtl_pertandingan', $data);
+            $data = array(
+                      "id_pertandingan" => $kode,
+                      "id_team" => $team['id_team'],
+                    );
+            $this->db->insert('tb_dtl_pertandingan', $data);
 
-            // $data = array(
-            //           "id_pertandingan" => $kode,
-            //           "id_team" => $teams['id_team'],
-            //         );
-            // $this->db->insert('tb_dtl_pertandingan', $data);
+            $data = array(
+                      "id_pertandingan" => $kode,
+                      "id_team" => $teams['id_team'],
+                    );
+            $this->db->insert('tb_dtl_pertandingan', $data);
             
             $arr[$j]['id_grup']=$grup['id_grup'];
             $arr[$j]['nm_grup']=$grup['nm_grup'];
