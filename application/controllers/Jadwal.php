@@ -246,4 +246,34 @@ class Jadwal extends CI_Controller {
     echo json_encode($output);
   }
 
+  public function HasilPertandingan(){
+    $this->load->view('template/header');
+    $this->load->view('template/sidebar');
+    $this->load->view('pages/hasilPertandingan');
+    $this->load->view('template/footer');
+  }
+
+  public function getHasilPertandingan(){
+    $data['data'] = $this->db->query("
+        SELECT TB1.id_pertandingan, TB1.id_event, TB1.id_grup, TB1.nm_grup, 
+        DATE_FORMAT(TB1.tgl_pertandingan, '%d-%b-%Y') tgl_pertandingan,
+        DATE_FORMAT(TB1.tgl_pertandingan, '%H:%i') waktu_pertandingan,
+        CONCAT(TB2.nm_team,' VS ',TB3.nm_team) nm_team, 
+        TB2.nm_team nm_team1, TB3.nm_team nm_team2,
+        TB1.team1, TB1.team2,
+        (SELECT CASE WHEN dtl.hasil='SERI' THEN 'SERI' ELSE (SELECT nm_team FROM tb_team WHERE id_team=dtl.id_team)  END FROM tb_dtl_pertandingan dtl WHERE dtl.id_pertandingan=TB1.id_pertandingan AND dtl.hasil IN ('MENANG','SERI') limit 1) HASIL
+        FROM(
+          SELECT a.id_pertandingan, a.tgl_pertandingan, a.id_grup,b.nm_grup, a.id_event,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1) team1,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1,1) team2
+          FROM tb_pertandingan a, tb_grup b
+          WHERE a.id_grup=b.id_grup
+        ) TB1, tb_team TB2, tb_team TB3
+        WHERE TB1.team1=TB2.id_team
+        AND TB1.team2=TB3.id_team
+        AND TB1.id_event='".$this->input->post('id_event')."'
+    ")->result();
+  	echo json_encode($data);
+  }
+
 }
