@@ -34,6 +34,7 @@
                   <tr>
                     <th width="80px;">No</th>
                     <th >Team</th>
+                    <th >Main</th>
                     <th >Menang</th>
                     <th >Kalah</th>
                     <th >Seri</th>
@@ -123,7 +124,7 @@
         $("[name='id_event']").val(Rowdata.id_event);
         $("[name='nm_event']").val(Rowdata.nm_event);
 
-        // REFRESH_DATA()
+        REFRESH_DATA()
         $('#modal_event').modal('hide');
     });
 
@@ -131,11 +132,11 @@
       $('#tb_data').DataTable().destroy();
       var tb_data = $("#tb_data").DataTable({
         "order": [[ 0, "asc" ]],
-        "pageLength": 10,
+        "pageLength": 50,
         "autoWidth": false,
         "responsive": true,
         "ajax": {
-            "url": "<?php echo site_url('jadwal/getHasilPertandingan') ?>",
+            "url": "<?php echo site_url('skor/getAllData') ?>",
             "type": "POST",
             "data": {
               id_event: $("[name='id_event']").val()
@@ -148,15 +149,15 @@
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            { "data": "nm_grup" }, { "data": "nm_team" },{ "data": "tgl_pertandingan" },{ "data": "waktu_pertandingan" },{ "data": "HASIL" },
+            { "data": "nm_team" }, 
             { "data": null, 
               "render" : function(data, type, full, meta){
-                // console.log(meta.row)
-                return "<button class='btn btn-sm btn-warning' onclick='editData("+JSON.stringify(data)+",\""+meta.row+"\");'><i class='fas fa-edit'></i></button> "+
-                "<button class='btn btn-sm btn-danger' onclick='deleteData(\""+data.id_pertandingan+"\");'><i class='fas fa-trash'></i></button>"
+                return parseInt(data.MENANG)+parseInt(data.KALAH)+parseInt(data.SERI)
               },
               className: "text-center"
             },
+            { "data": "MENANG", className: "text-center" },{ "data": "KALAH", className: "text-center" },
+            { "data": "SERI", className: "text-center" },{ "data": "SKOR", className: "text-center" }
         ]
       })
     }
