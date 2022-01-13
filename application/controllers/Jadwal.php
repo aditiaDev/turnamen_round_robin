@@ -276,4 +276,20 @@ class Jadwal extends CI_Controller {
   	echo json_encode($data);
   }
 
+  public function updateHasilPertandingan(){
+
+    if($this->input->post('pemenang') == "SERI"){
+      $sql = "UPDATE tb_dtl_pertandingan SET hasil='SERI', skor='1' WHERE id_pertandingan='".$this->input->post('id_pertandingan')."'";
+      $this->db->query($sql);
+    }else{
+      $sql = "UPDATE tb_dtl_pertandingan SET hasil='KALAH', skor='0' WHERE id_pertandingan='".$this->input->post('id_pertandingan')."'";
+      $this->db->query($sql);
+      $sql = "UPDATE tb_dtl_pertandingan SET hasil='MENANG', skor='3' WHERE id_team='".$this->input->post('pemenang')."' AND id_pertandingan='".$this->input->post('id_pertandingan')."'";
+      $this->db->query($sql);
+    }
+
+    $output = array("status" => "success", "message" => "Data Berhasil di Update");
+    echo json_encode($output);
+  }
+
 }
