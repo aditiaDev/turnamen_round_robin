@@ -9,6 +9,7 @@ class Front extends CI_Controller {
   }
 
   public function index(){
+    // $this->load->view('front/atas');
     $this->load->view('front/index');
   }
 
@@ -40,6 +41,10 @@ class Front extends CI_Controller {
     }
 
   	echo json_encode($data);
+  }
+
+  public function addTeam(){
+    $this->load->view('front/addTeam');
   }
 
 }

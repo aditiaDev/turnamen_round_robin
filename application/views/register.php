@@ -1,128 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zxx">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mebel Buk Dhe Jepara</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MOBA - Register</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/fontawesome-free/css/all.min.css'); ?>">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css'); ?>">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/dist/css/adminlte.min.css'); ?>">
-  <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.css'); ?>">
+    <link rel="shortcut icon" href="<?php echo base_url('/assets/begam/images/fav.png'); ?>" type="image/x-icon">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/bootstrap.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/fontawesome.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/slick.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/nice-select.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/animate.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/style.css'); ?>">
 </head>
-<body class="hold-transition login-page">
-<div class="login-box" style="width: 540px;">
-  <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <h3>Mebel Buk Dhe Jepara</h3>
-    </div>
-    <div class="card-body">
-      <p class="login-box-msg">Register a new user</p>
 
-      <form method="post" id="FRM_DATA">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Nama</label>
-              <input type="text" class="form-control" name="nm_pelanggan">
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>No Telp.</label>
-              <input type="text" class="form-control" name="no_tlp">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="form-group">
-              <label>Username Telegram</label>
-              <input type="text" class="form-control" name="username_telegram" >
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Alamat</label>
-          <textarea name="alamat" class="form-control"></textarea>
-        </div>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Username</label>
-              <input type="text" class="form-control" name="username" >
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Password</label>
-              <input type="password" class="form-control" name="password">
-            </div>
-          </div>
-        </div>
-        
-        <div class="row">
-          <div class="col-4">
-            <a href="<?php echo base_url("login")?>" class="btn btn-warning btn-block"><i class="fas fa-arrow-left"></i> Login Page</a>
-          </div>
-          <div class="col-4"></div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-info btn-block">Register</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
+<body>
 
-    </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
-</div>
-<!-- /.login-box -->
+    <!-- start preloader -->
+    <div class="preloader" id="preloader"></div>
+    <!-- end preloader -->
 
-<!-- jQuery -->
-<script src="<?php echo base_url('/assets/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
-<!-- Bootstrap 4 -->
-<script src="<?php echo base_url('/assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo base_url('/assets/adminlte/dist/js/adminlte.min.js'); ?>"></script>
-<script src="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.js'); ?>"></script>
-<script>
-  $(function(){
-    $("#FRM_DATA").submit(function(event){
+    <!-- Login Reg In start -->
+    <section id="login-reg">
+        <div class="overlay pb-120">
+            <div class="container">
+                <div class="top-area">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-sm-5 col">
+                            <a class="back-home" href="index.html">
+                                <img src="images/left-icon.png" alt="image">
+                                Back To Begam
+                            </a>
+                        </div>
+                        <div class="col-sm-5 col">
+                            <a href="#">
+                                <img src="images/logo.png" alt="image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-120 d-flex justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="login-reg-main text-center">
+                            <h4>Let's get started</h4>
+                            <div class="form-area">
+                                <form id="FRM_DATA">
+                                    <div class="form-group">
+                                        <label>Nama User</label>
+                                        <input  type="text" name="nm_user" placeholder="Nama Pengguna">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input placeholder="Enter Your Username" type="text" name="username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input placeholder="Enter your password" type="password" name="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="cmn-btn">Daftar</button>
+                                    </div>
+                                </form>
+                                <div class="account">
+                                    <p>Already have an account? <a href="<?php echo base_url("login/")?>">Sign In</a></p>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Login Reg In end -->
 
-      event.preventDefault();
-      var formData = $(this).serialize();
-      $.ajax({
-          url: "<?php echo site_url('login/signUp') ?>",
-          type: "POST",
-          data: formData,
-          dataType: "JSON",
-          /*beforeSend: function () {
-            $("#LOADER").show();
-          },
-          complete: function () {
-            $("#LOADER").hide();
-          },*/
-          success: function(data){
-            console.log(data)
-            if (data.status == "success") {
-              alert('Pendaftaran Berhasil')
-              window.location="<?php echo base_url('login');?>"
-            }else{
-              toastr.error(data.message)
-            }
-          }
-      })
-    })
-  })
-</script>
+    <script src="<?php echo base_url('/assets/begam/js/jquery-3.5.1.min.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/bootstrap.min.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/slick.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/jquery.nice-select.min.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/fontawesome.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/jquery.counterup.min.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/jquery.waypoints.min.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/wow.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/begam/js/main.js'); ?>"></script>
+    <script>
+        $(function(){
+            $("#FRM_DATA").submit(function(event){
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "<?php echo site_url('login/signUp') ?>",
+                    type: "POST",
+                    data: formData,
+                    dataType: "JSON",
+                    success: function(data){
+                        // console.log(data)
+                        if (data.status == "success") {
+                            alert('Pendaftaran Berhasil')
+                            window.location="<?php echo base_url('login');?>"
+                        }else{
+                            toastr.error(data.message)
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 </body>
+
 </html>

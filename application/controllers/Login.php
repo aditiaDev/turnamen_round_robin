@@ -20,17 +20,21 @@ class Login extends CI_Controller {
     $this->db->where('password', $this->input->post('password'));  
     $query = $this->db->get('tb_user');   
     if($query->num_rows() > 0){  
-      foreach ($query->result() as $row)
-      {   
+      foreach ($query->result() as $row){   
         $arrdata = array(
           'id_user'=>$row->id_user,
-          'level'=>$row->level,
-          'username'=>$row->username,
+          'hak_akses'=>$row->hak_akses,
+          'nm_user'=>$row->nm_user,
         );  
-          $this->session->set_userdata($arrdata);
+        $this->session->set_userdata($arrdata);
       }
 
-      $output = array("status" => "success", "message" => "Login Berhasil");
+      if($this->session->userdata('hak_akses') == "ADMIN"){
+        $url=base_url('home');
+      }else{
+        $url=base_url('front/addTeam');
+      }
+      $output = array("status" => "success", "message" => "Login Berhasil", "url" => $url);
     }else{  
       $output = array("status" => "error", "message" => "Login Gagal");  
     }
@@ -50,13 +54,9 @@ class Login extends CI_Controller {
 
   public function signUp(){
     $this->load->library('form_validation');
-    $this->form_validation->set_rules('nm_pelanggan', 'Nama', 'required');
-    $this->form_validation->set_rules('alamat', 'Alamat', 'required');
-    $this->form_validation->set_rules('no_tlp', 'No Telphone', 'required|numeric');
-    $this->form_validation->set_rules('no_tlp', 'No Telphone', 'required|numeric');
-
+    $this->form_validation->set_rules('nm_user', 'Nama Pengguna', 'required');
     $this->form_validation->set_rules('username', 'Username', 'required|is_unique[tb_user.username]');
-    $this->form_validation->set_rules('username_telegram', 'username Telegram', 'required');
+    $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
 
     if($this->form_validation->run() == FALSE){
       // echo validation_errors();
@@ -65,28 +65,24 @@ class Login extends CI_Controller {
       return false;
     }
 
+    $unik = 'US'.date('Ym');
+    $kode = $this->db->query("select MAX(id_user) LAST_NO from tb_user WHERE id_user LIKE '".$unik."%'")->row()->LAST_NO;
+    
+    $urutan = (int) substr($kode, -4);
+    $urutan++;
+    $kode = $unik . sprintf("%04s", $urutan);
+
     $dataUser = array(
+              "id_user" => $kode,
+              "nm_user" => $this->input->post('nm_user'),
               "username" => $this->input->post('username'),
               "password" => $this->input->post('password'),
-              "level" => "pelanggan",
+              "hak_akses" => "PESERTA",
+              "status" => "AKTIF",
             );
     $this->db->insert('tb_user', $dataUser);
 
-    $id_user = $this->db->query("SELECT id_user FROM tb_user 
-                                WHERE username='".$this->input->post('username')."' 
-                                AND `password`='".$this->input->post('password')."' 
-                                LIMIT 1")->row()->id_user;
-
-    
-    $data = array(
-              "nm_pelanggan" => $this->input->post('nm_pelanggan'),
-              "no_tlp" => $this->input->post('no_tlp'),
-              "alamat" => $this->input->post('alamat'),
-              "username_telegram" => $this->input->post('username_telegram'),
-              "id_user" => $id_user,
-            );
-    $this->db->insert('tb_pelanggan', $data);
-    $output = array("status" => "success", "message" => "Data Berhasil Disimpan");
+    $output = array("status" => "success", "message" => "Pembuatan Akun Berhasil");
     echo json_encode($output);
   }
 
