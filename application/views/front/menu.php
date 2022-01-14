@@ -15,9 +15,9 @@
                             <li><a href="index.html" class="active">Home</a></li>
                             <li class="menu_has_children"><a href="#0">Turnamen</a>
                                 <ul class="sub-menu">
-                                    <li><a href="tournaments.html">Pembagian Grup</a></li>
-                                    <li><a href="tournaments.html">Jadwal Pertandingan</a></li>
-                                    <li><a href="tournaments.html">Hasil Pertandingan</a></li>
+                                    <li><a href="#">Pembagian Grup</a></li>
+                                    <li><a href="#">Jadwal Pertandingan</a></li>
+                                    <li><a href="#">Hasil Pertandingan</a></li>
                                 </ul>
                             </li>
                             <li class="menu_has_children"><a href="#0">Team</a>
@@ -28,10 +28,16 @@
                         </ul>
                     </div>
                 </nav>
-                <div class="right-area header-action d-flex align-items-center">
-                    <a href="<?php echo base_url("login/")?>" class="login-btn">Login</a>
-                    <a href="<?php echo base_url("login/register")?>" class="cmn-btn">Daftar!</a>
-                </div>
+                <?php if(!$this->session->userdata('id_user')){ ?>
+                    <div class="right-area header-action d-flex align-items-center">
+                        <a href="<?php echo base_url("login/")?>" class="login-btn">Login</a>
+                        <a href="<?php echo base_url("login/register")?>" class="cmn-btn">Daftar!</a>
+                    </div>
+                <?php }else{ ?>
+                    <div class="right-area header-action d-flex align-items-center">
+                        <a href="<?php echo base_url("login/logout")?>" class="cmn-btn">Logout</a>
+                    </div>
+                <?php } ?>    
             </div>
         </div>
     </div>

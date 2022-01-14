@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/animate.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/datepicker/datepicker3.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.css'); ?>">
 </head>
 <body>
     <div class="preloader" id="preloader"></div>

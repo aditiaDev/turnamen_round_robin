@@ -54,6 +54,7 @@
 <script src="<?php echo base_url('/assets/begam/js/wow.js'); ?>"></script>
 <script src="<?php echo base_url('/assets/begam/js/main.js'); ?>"></script>
 <script src="<?php echo base_url('/assets/adminlte/plugins/datepicker/bootstrap-datepicker.js'); ?>"></script>
+<script src="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.js'); ?>"></script>
 
 </body>
 

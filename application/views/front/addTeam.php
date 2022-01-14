@@ -2,203 +2,94 @@
 <?php include 'menu.php'; ?>
 
 
-<!-- Browse Tournaments start -->
-<section id="tournaments-section">
-    <div class="overlay pt-120 pb-120">
-        <div class="container wow fadeInUp">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <div class="section-header">
-                        <h2 class="title">Cari Turnamen</h2>
-                        <p>Temukan turnamen yang sempurna untuk Team Anda, dan dapatkan Hadiahnya.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-40 mp-none">
-                <div class="col-lg-3 col-md-3">
-                    <div class="single-input">
-                        <span>Status</span>
-                        <select name="STATUS">
-                            <option value="">ALL</option>
-                            <option value="BUKA">AKTIF</option>
-                            <option value="TUTUP">SELESAI</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="single-input">
-                        <span>Tanggal Dari</span>
-                        <input type="text" class="datepicker" name="TGL_MULAI" placeholder="Tanggal">
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="single-input">
-                        <span>Sampai</span>
-                        <input type="text" class="datepicker" name="TGL_SAMPAI" placeholder="Tanggal">
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-3">
-                    <div class="single-input">
-                    <button type="button" style="margin-top: 40px;" class="cmn-btn" id="BTN_CARI">Cari</button>
-                    </div>
-                </div>
-            </div>
-            <span id="LIST_EVENT"></span>
-        </div>
+<!-- banner-section start -->
+<section id="banner-section" class="inner-banner profile features shop">
+    <div class="ani-img">
+        <img class="img-1" src="<?php echo base_url('/assets/begam/images/banner-circle-1.png'); ?>" alt="icon">
+        <img class="img-2" src="<?php echo base_url('/assets/begam/images/banner-circle-2.png'); ?>" alt="icon">
+        <img class="img-3" src="<?php echo base_url('/assets/begam/images/banner-circle-2.png'); ?>" alt="icon">
     </div>
-</section>
-<!-- Browse Tournaments end -->
-
-
-<!-- Players of the Week In start -->
-<section id="players-week-section">
-    <div class="overlay pt-120 pb-120">
-        <div class="container wow fadeInUp">
-            <div class="row justify-content-center">
-                <div class="col-lg-7 mb-30">
-                    <div class="section-header text-center">
-                        <h2 class="title">Players of the Week</h2>
-                        <p>We take a look at the best player of the week awarded
-                            on Monday for the previous Monday to Sunday</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mp-none">
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-item text-center">
-                        <div class="img-area">
-                            <div class="img-wrapper">
-                                <img src="<?php echo base_url('/assets/begam/images/player-1.png'); ?>" alt="image">
-                            </div>
-                        </div>
-                        <a href="profile.html"><h5>Barton Griggs</h5></a>
-                        <p class="date">
-                            <span class="text-sm earn">1970 XP Earned</span>
-                            <span class="text-sm">04/05 - 04/12</span>
-                        </p>
-                        <p class="text-sm credit">
-                            <span class="text-sm"><img src="<?php echo base_url('/assets/begam/images/credit-icon.png'); ?>" alt="image"> +20 credits</span>
-                        </p>
-                        <a href="profile.html" class="cmn-btn">View Profile</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-item mid-area text-center">
-                        <div class="top-level">
-                            <img src="<?php echo base_url('/assets/begam/images/star.png'); ?>" alt="image">
-                        </div>
-                        <div class="img-area">
-                            <div class="img-wrapper">
-                                <img src="<?php echo base_url('/assets/begam/images/player-2.png'); ?>" alt="image">
-                            </div>
-                        </div>
-                        <a href="profile.html"><h5>Mervin Trask</h5></a>
-                        <p class="date">
-                            <span class="text-sm earn">1970 XP Earned</span>
-                            <span class="text-sm">04/05 - 04/12</span>
-                        </p>
-                        <p class="text-sm credit">
-                            <span class="text-sm"><img src="<?php echo base_url('/assets/begam/images/credit-icon.png'); ?>" alt="image"> +20 credits</span>
-                        </p>
-                        <a href="profile.html" class="cmn-btn">View Profile</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-item text-center">
-                        <div class="img-area">
-                            <div class="img-wrapper">
-                                <img src="<?php echo base_url('/assets/begam/images/player-3.png'); ?>" alt="image">
-                            </div>
-                        </div>
-                        <a href="profile.html"><h5>Adria Poulin</h5></a>
-                        <p class="date">
-                            <span class="text-sm earn">1970 XP Earned</span>
-                            <span class="text-sm">04/05 - 04/12</span>
-                        </p>
-                        <p class="text-sm credit">
-                            <span class="text-sm"><img src="<?php echo base_url('/assets/begam/images/credit-icon.png'); ?>" alt="image"> +20 credits</span>
-                        </p>
-                        <a href="profile.html" class="cmn-btn">View Profile</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Players of the Week In end -->
-
-<!-- Features In start -->
-<section id="features-section">
-    <div class="overlay pt-120">
-        <div class="container wow fadeInUp">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="section-header text-center">
-                        <h2 class="title">MOBA GAMES</h2>
-                        <p>Turnamen esports Mobile Legend Terbaik kapan saja, di mana saja</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row pm-none">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-item text-center">
-                        <div class="img-area">
-                            <img src="<?php echo base_url('/assets/begam/images/features-icon-1.png'); ?>" alt="image">
-                        </div>
-                        <h5>Daftarkan Team Anda</h5>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-item text-center">
-                        <div class="img-area">
-                            <img src="<?php echo base_url('/assets/begam/images/features-icon-6.png'); ?>" alt="image">
-                        </div>
-                        <h5>Ikuti Turnamennya</h5>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-item text-center">
-                        <div class="img-area">
-                            <img src="<?php echo base_url('/assets/begam/images/features-icon-5.png'); ?>" alt="image">
-                        </div>
-                        <h5>Menangkan Hadiahnya</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Features In end -->
-
-<!-- Call to Action In start -->
-<section id="call-to-action">
-    <div class="overlay pt-120 pb-120">
+    <div class="banner-content d-flex align-items-center">
         <div class="container">
-            <div class="main-content">
-                <div class="row d-sm-flex justify-content-sm-end">
-                    <div class="col-lg-4 col-md-1">
-                        <img class="left" src="<?php echo base_url('/assets/begam/images/call-to-action-left.png'); ?>" alt="image">
-                    </div>
-                    <div class="col-lg-4 col-md-5 col-sm-5 d-flex align-items-center">
-                        <div class="section-item">
-                            <h4>Undang Teman dan Menangkan Hadiah. Bergabunglah dengan kami sekarang juga.</h4>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6 d-flex justify-content-center justify-content-sm-end align-items-center">
-                        <div class="btn-area d-flex justify-content-center justify-content-sm-end align-items-center">
-                            <a href="<?php echo base_url("login/register")?>" class="cmn-btn">Daftar Sekarang</a>
-                        </div>
-                        <img src="<?php echo base_url('/assets/begam/images/call-to-action-right.png'); ?>" alt="image">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="main-content">
+                        <h1>Profil Team</h1>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Call to Action In end -->
+<!-- banner-section end -->
+
+<!-- Check Out Start -->
+<section id="checkout" class="pt-120 pb-120">
+    <div class="overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="head-area top">
+                        <h4>Profil Team</h4>
+                        <p>Lengkapi data team kamu</p>
+                    </div>
+                    <form id="FRM_DATA" method="post" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Nama Team</label>
+                                <input type="text" class="form-control" name="nm_team">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label >Logo Team</label>
+                                <input type="file" class="form-control" name="logo" id="logo" accept="image/png, image/gif, image/jpeg">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Alamat Team</label>
+                                <textarea name="alamat_team" style="border: 1px solid rgba(255, 255, 255, 0.1);border-radius: 10px;background: transparent;color: var(--body-color);height: auto;padding: 15px 12px;" class="form-control" ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" class="cmn-btn">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Cart End -->
 
 <script src="<?php echo base_url('/assets/begam/js/jquery-3.5.1.min.js'); ?>"></script>
 <script>
-    
+  $("#FRM_DATA").on('submit', function(event){
+    event.preventDefault();
+    let formData = new FormData(this);
+    urlPost = "<?php echo site_url('front/saveTeam') ?>";
+    ACTION(urlPost, formData)
+  })
+
+  function ACTION(urlPost, formData){
+    $.ajax({
+      url: urlPost,
+      type: "POST",
+      data: formData,
+      processData : false,
+      cache: false,
+      contentType : false,
+      success: function(data){
+        data = JSON.parse(data)
+        console.log(data)
+        if (data.status == "success") {
+          alert(data.message)
+          window.location="<?php echo base_url('front/team');?>"
+        }else{
+          toastr.error(data.message)
+        }
+      }
+    })
+  }
 </script>
 <?php include 'footer.php'; ?>

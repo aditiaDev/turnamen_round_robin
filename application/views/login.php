@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/slick.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/nice-select.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/animate.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/style.css'); ?>">
 </head>
 
@@ -80,6 +81,7 @@
     <script src="<?php echo base_url('/assets/begam/js/jquery.counterup.min.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/jquery.waypoints.min.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/wow.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/main.js'); ?>"></script>
     <script>
         $(function(){
