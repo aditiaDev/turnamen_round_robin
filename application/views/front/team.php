@@ -34,7 +34,7 @@
                     <div class="col-md-6">
                         <div class="profile-area d-flex align-items-center">
                             <div class="photo">
-                                <img style="max-width: 100px;" src="<?php echo base_url('/assets/images/team/'.$data[0]['logo']); ?>" alt="Image">
+                                <img style="max-width: 100px;border-radius: 50px;" src="<?php echo base_url('/assets/images/team/'.$data[0]['logo']); ?>" alt="Image">
                             </div>
                             <div class="name-area">
                                 <h4><?php echo $data[0]['nm_team']; ?></h4>

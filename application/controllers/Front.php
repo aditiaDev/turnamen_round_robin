@@ -115,4 +115,12 @@ class Front extends CI_Controller {
     $this->load->view('front/team', $data);
   }
 
+  public function dtlEvent(){
+    $data['data'] = $this->db->query("SELECT id_event, nm_event, DATE_FORMAT(tgl_event, '%d-%b-%Y') tgl_event, 
+    CONCAT(DATE_FORMAT(tgl_start_pendaftaran, '%d-%b-%y %H:%i'), ' - ', DATE_FORMAT(tgl_selesai_pendaftaran, '%d-%b-%y %H:%i')) tgl_pendaftaran,
+    status, biaya_pendaftaran 
+    FROM tb_event WHERE id_event='EV2022010001'")->result_array();
+    $this->load->view('front/dtlEvent',$data);
+  }
+
 }
