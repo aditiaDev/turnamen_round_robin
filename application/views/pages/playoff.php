@@ -11,10 +11,10 @@
         <div class="col-4">
           <div class="card card-dark" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Atur Pembagian Grup</h3>
+              <h3 class="card-title">Atur Jadwal PlayOff</h3>
             </div>
 
-              <form id="FRM_DATA" role="form" method="POST">
+              
                 <div class="card-body">
                   <div class="form-group">
                     <label>Nama Event</label>
@@ -24,23 +24,11 @@
                       <button type="button" id="BTN_EVENT" class="btn btn-sm btn-default"><i class="fas fa-list"></i></button>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label>Jumlah Team</label>
-                    <input type="text" class="form-control" name="jml_team" readonly>
-                  </div>
-                  <div class="form-group">
-                    <label>Jumlah Team per Grup</label>
-                    <input type="text" class="form-control" name="jml_team_grup" onchange="aturJadwal()">
-                  </div>
-                  <div class="form-group">
-                    <label>Jumlah Grup</label>
-                    <input type="text" class="form-control" name="jml_grup" readonly>
-                  </div>
                 </div>
                 <div class="card-footer">
                   <button type="button" class="btn btn-dark" id="BTN_PROSES" >Proses</button>
                 </div>
-              </form>
+              
 
           </div>
         </div>
@@ -48,7 +36,7 @@
         <div class="col-8">
           <div class="card card-dark" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Pembagian Grup</h3>
+              <h3 class="card-title">Jadwal PlayOff</h3>
             </div>
 
             <div class="card-body">
@@ -56,8 +44,8 @@
                 <thead>
                   <tr>
                     <th width="10%">No</th>
-                    <th >Grup</th>
                     <th >Team</th>
+                    <th>Jadwal</th>
                     <th style="text-align:center">Action</th>
                   </tr>
                 </thead>
@@ -102,6 +90,46 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
+
+    <div class="modal fade" id="modal_edit">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="FRM_DATA">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Jadwal</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Versus</label>
+                <input type="text" class="form-control" name="versus" readonly>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>Tanggal Pertandingan</label>
+                    <input type="text" class="form-control datepicker" name="tgl_pertandingan" >
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>Waktu Pertandingan</label>
+                    <input type="time" class="form-control" name="waktu_pertandingan" >
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="BTN_SAVE">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- /.modal -->
 
   </section>
@@ -111,6 +139,15 @@
 <script src="<?php echo base_url('/assets/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
 <script src="<?php echo base_url('/assets/adminlte/plugins/select2/js/select2.full.min.js'); ?>"></script>
 <script>
+  var id_data;
+
+  $(function(){
+    $(".datepicker").datepicker({
+      autoclose: true,
+      format: 'dd-M-yyyy'
+    });
+  })
+  
   $("#BTN_EVENT").click(function(){
     tb_event = $('#tb_event').DataTable( {
         "order": [[ 1, "asc" ]],
@@ -136,40 +173,34 @@
 
       $("[name='id_event']").val(Rowdata.id_event);
       $("[name='nm_event']").val(Rowdata.nm_event);
-      $("[name='jml_team']").val(Rowdata.jml_team);
 
       REFRESH_DATA()
-
       $('#modal_event').modal('hide');
   });
 
-  function aturJadwal(){
-    var jmlTeam = $("[name='jml_team']").val()
-    var jmlTeamGrup = $("[name='jml_team_grup']").val()
-    var result = parseFloat(jmlTeam/jmlTeamGrup)
-    if(result%2 != 0){
-      alert('Jumlah Grup Harus genap');
-      $("#BTN_PROSES").attr('disabled',true)
-      return
-    }
-    $("[name='jml_grup']").val(result)
-    $("#BTN_PROSES").attr('disabled',false)
-  }
-
   $("#BTN_PROSES").click(function(){
     $.ajax({
-      url: "<?php echo site_url('jadwal/PembagianGrup') ?>",
+      url: "<?php echo site_url('jadwal/inputPlayOff') ?>",
       type: "POST",
       dataType: "JSON",
       data: {
-        id_event: $("[name='id_event']").val(),
-        jmlTeamGrup: $("[name='jml_team_grup']").val(),
-        jmlGrup: $("[name='jml_grup']").val()
+        id_event: $("[name='id_event']").val()
       },
       success: function(data){
         if (data.status == "success") {
           toastr.info(data.message)
-          REFRESH_DATA()
+          var rowData=''
+          $.each(data.data, function(index, value){
+            no = index+1
+            rowData += "<tr>"+
+                            "<td>"+no+"</td>"+
+                            "<td>"+value['team']+"</td>"+
+                            "<td></td>"+
+                            "<td><button class='btn btn-sm btn-warning' onclick='editData("+JSON.stringify(data['data'][index])+");'><i class='fas fa-edit'></i></button> "+
+                "<button class='btn btn-sm btn-danger' onclick='deleteData(\""+value['id_pertandingan']+"\");'><i class='fas fa-trash'></i></button></td>"+
+                          "</tr>"
+          })
+          $("#tb_data tbody").html(rowData);
 
         }else{
           toastr.error(data.message)
@@ -178,36 +209,72 @@
     })
   })
 
+  function editData(data, index){
+    console.log(data)
+    id_data = data.id_pertandingan;
+    $("[name='versus']").val(data.nm_team)
+    $("#modal_edit").modal('show')
+  }
+
   function REFRESH_DATA(){
-    $('#tb_data').DataTable().destroy();
-    var tb_data = $("#tb_data").DataTable({
-      "order": [[ 0, "asc" ]],
-      "pageLength": 10,
-      "autoWidth": false,
-      "responsive": true,
-      "ajax": {
-          "url": "<?php echo site_url('jadwal/getPembagianGrup') ?>",
-          "type": "POST",
-          "data": {
-            id_event: $("[name='id_event']").val()
-          }
+    $("#BTN_PROSES").attr('disabled',false)
+    $.ajax({
+      url: "<?php echo site_url('jadwal/jadwalPlayOff') ?>",
+      type: "POST",
+      dataType: "JSON",
+      data: {
+        id_event: $("[name='id_event']").val()
       },
-      "columns": [
-          {
-              "data": null,
-              render: function (data, type, row, meta) {
-                  return meta.row + meta.settings._iDisplayStart + 1;
-              }
-          },
-          { "data": "nm_grup" },{ "data": "nm_team" },
-          { "data": null, 
-            "render" : function(data, type, full, meta){
-              // console.log(meta.row)
-              return "<button class='btn btn-sm btn-danger' onclick='deleteData(\""+data.id_jadwal+"\");'><i class='fas fa-trash'></i> Delete</button>"
-            },
-            className: "text-center"
-          },
-      ]
+      success: function(data){
+          
+          console.log(data.data.length)
+          if(data.data.length > 0){
+            $("#BTN_PROSES").attr('disabled',true)
+          }
+          var rowData=''
+          $.each(data.data, function(index, value){
+            no = index+1
+            rowData += "<tr>"+
+                            "<td>"+no+"</td>"+
+                            "<td>"+value['nm_team']+"</td>"+
+                            "<td>"+value['tgl_pertandingan']+" "+value['waktu_pertandingan']+"</td>"+
+                            "<td><button class='btn btn-sm btn-warning' onclick='editData("+JSON.stringify(data['data'][index])+");'><i class='fas fa-edit'></i></button> "+
+                "<button class='btn btn-sm btn-danger' onclick='deleteData(\""+value['id_pertandingan']+"\");'><i class='fas fa-trash'></i></button></td>"+
+                          "</tr>"
+          })
+          $("#tb_data tbody").html(rowData);
+
+      }
+    })
+  }
+
+  $("#BTN_SAVE").click(function(){
+    event.preventDefault();
+    var formData = $("#FRM_DATA").serialize();
+
+    urlPost = "<?php echo site_url('jadwal/updateJadwalPertandingan') ?>";
+    formData+="&id_pertandingan="+id_data
+
+    ACTION(urlPost, formData)
+    $("#modal_edit").modal('hide')
+  })
+
+  function ACTION(urlPost, formData){
+    $.ajax({
+        url: urlPost,
+        type: "POST",
+        data: formData,
+        dataType: "JSON",
+        success: function(data){
+          console.log(data)
+          if (data.status == "success") {
+            toastr.info(data.message)
+            REFRESH_DATA()
+
+          }else{
+            toastr.error(data.message)
+          }
+        }
     })
   }
 </script>

@@ -1,11 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Methods: GET, OPTIONS");
 class Front extends CI_Controller {
 
   public function __construct(){
     parent::__construct();
-
+    $params = array('server_key' => 'SB-Mid-server-ij2O22aUOUuH5-RZB5Tyyynn', 'production' => false);
+    $this->load->library('midtrans');
+    $this->midtrans->config($params);
+    $this->load->helper('url');
   }
 
   public function index(){
@@ -115,12 +119,29 @@ class Front extends CI_Controller {
     $this->load->view('front/team', $data);
   }
 
-  public function dtlEvent(){
+  public function dtlEvent($id){
     $data['data'] = $this->db->query("SELECT id_event, nm_event, DATE_FORMAT(tgl_event, '%d-%b-%Y') tgl_event, 
     CONCAT(DATE_FORMAT(tgl_start_pendaftaran, '%d-%b-%y %H:%i'), ' - ', DATE_FORMAT(tgl_selesai_pendaftaran, '%d-%b-%y %H:%i')) tgl_pendaftaran,
-    status, biaya_pendaftaran 
-    FROM tb_event WHERE id_event='EV2022010001'")->result_array();
+    status, biaya_pendaftaran, deskripsi 
+    FROM tb_event WHERE id_event='".$id."'")->result_array();
     $this->load->view('front/dtlEvent',$data);
+  }
+
+  // public function pembayaran(){
+  //   $data['mid'] = $this->midtrans->status('828784954');
+  //   $this->load->view('front/pembayaran');
+  // }
+
+  public function turnamenku(){
+    $data['data'] = $this->db->query("SELECT C.id_event, C.nm_event, DATE_FORMAT(C.tgl_event, '%d-%b-%Y') tgl_event, 
+    CONCAT(DATE_FORMAT(C.tgl_start_pendaftaran, '%d-%b-%y %H:%i'), ' - ', DATE_FORMAT(C.tgl_selesai_pendaftaran, '%d-%b-%y %H:%i')) tgl_pendaftaran,
+    C.status, C.biaya_pendaftaran FROM tb_pendaftaran A,
+    tb_team B, tb_event C
+    WHERE A.id_team=B.id_team
+    AND A.id_event=C.id_event
+    AND A.status_pendaftaran='AKTIF'
+    AND B.id_user='".$this->session->userdata('id_user')."'")->result_array();
+    $this->load->view('front/turnamenku', $data);
   }
 
 }

@@ -15,6 +15,9 @@
                             <li><a href="<?php echo base_url("front/")?>" class="active">Home</a></li>
                             <li class="menu_has_children"><a href="#0">Turnamen</a>
                                 <ul class="sub-menu">
+                                  <?php if($this->session->userdata('id_user')){ ?>
+                                    <li><a href="<?php echo base_url("front/turnamenku")?>">Turnamenku</a></li>
+                                  <?php }?>
                                     <li><a href="#">Pembagian Grup</a></li>
                                     <li><a href="#">Jadwal Pertandingan</a></li>
                                     <li><a href="#">Hasil Pertandingan</a></li>
@@ -22,9 +25,10 @@
                             </li>
                             <li class="menu_has_children"><a href="#0">Team</a>
                                 <ul class="sub-menu">
-                                    <li><a href="about-us.html">Data Team</a></li>
+                                    <li><a href="<?php echo base_url("front/team")?>">Data Team</a></li>
                                 </ul>
                             </li>
+                            <!-- <li><a href="<?php echo base_url("front/pembayaran")?>">Pembayaran</a></li> -->
                         </ul>
                     </div>
                 </nav>

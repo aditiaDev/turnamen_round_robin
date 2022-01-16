@@ -22,11 +22,11 @@ class Snap extends CI_Controller {
 
 	public function __construct()
     {
-        parent::__construct();
-        $params = array('server_key' => 'SB-Mid-server-ij2O22aUOUuH5-RZB5Tyyynn', 'production' => false);
-		$this->load->library('midtrans');
-		$this->midtrans->config($params);
-		$this->load->helper('url');	
+      parent::__construct();
+      $params = array('server_key' => 'SB-Mid-server-ij2O22aUOUuH5-RZB5Tyyynn', 'production' => false);
+      $this->load->library('midtrans');
+      $this->midtrans->config($params);
+      $this->load->helper('url');	
     }
 
     public function index()
@@ -34,98 +34,87 @@ class Snap extends CI_Controller {
     	$this->load->view('checkout_snap');
     }
 
-    public function token()
-    {
-		
-		// Required
-		$transaction_details = array(
-		  'order_id' => rand(),
-		  'gross_amount' => 94000, // no decimal allowed for creditcard
-		);
+    public function token(){
+      $id_event = $this->input->post('id_event');
+      $event = $this->db->query("SELECT nm_event, biaya_pendaftaran FROM tb_event WHERE id_event='".$id_event."'")->result_array();
+      
+      $unik = 'DF'.date('Ym');
+      $kode = $this->db->query("select MAX(id_pendaftaran) LAST_NO from tb_pendaftaran WHERE id_pendaftaran LIKE '".$unik."%'")->row()->LAST_NO;
+      
+      $urutan = (int) substr($kode, -4);
+      $urutan++;
+      $kode = $unik . sprintf("%04s", $urutan);
+      
+      $id_pesanan = rand();
 
-		// Optional
-		$item1_details = array(
-		  'id' => 'a1',
-		  'price' => 18000,
-		  'quantity' => 3,
-		  'name' => "Apple"
-		);
+      $this->db->query("INSERT INTO tb_pendaftaran(id_pendaftaran,tgl_daftar,id_team,id_event,status_pendaftaran,id_pesanan)
+      VALUES('".$kode."', SYSDATE(), (SELECT id_team FROM tb_team WHERE id_user='".$this->session->userdata('id_user')."'), 
+      '".$id_event."', 'AKTIF', '".$id_pesanan."')");
 
-		// Optional
-		$item2_details = array(
-		  'id' => 'a2',
-		  'price' => 20000,
-		  'quantity' => 2,
-		  'name' => "Orange"
-		);
+      // //Required
+      $transaction_details = array(
+        'order_id' => $id_pesanan,
+        'gross_amount' => $event[0]['biaya_pendaftaran'], // no decimal allowed for creditcard
+      );
 
-		// Optional
-		$item_details = array ($item1_details, $item2_details);
+      // Optional
+      $item1_details = array(
+        'id' => $id_event,
+        'price' => $event[0]['biaya_pendaftaran'],
+        'quantity' => 1,
+        'name' => $event[0]['nm_event']
+      );
 
-		// Optional
-		$billing_address = array(
-		  'first_name'    => "Andri",
-		  'last_name'     => "Litani",
-		  'address'       => "Mangga 20",
-		  'city'          => "Jakarta",
-		  'postal_code'   => "16602",
-		  'phone'         => "081122334455",
-		  'country_code'  => 'IDN'
-		);
+      // Optional
+      $item_details = array ($item1_details);
 
-		// Optional
-		$shipping_address = array(
-		  'first_name'    => "Obet",
-		  'last_name'     => "Supriadi",
-		  'address'       => "Manggis 90",
-		  'city'          => "Jakarta",
-		  'postal_code'   => "16601",
-		  'phone'         => "08113366345",
-		  'country_code'  => 'IDN'
-		);
+      // Optional
+      $customer_details = array(
+        'first_name'    => "Yusuf",
+        'last_name'     => "Hayhay",
+        'email'         => "Yusuf@Hayhay.com",
+        'phone'         => "085632436786",
+      );
 
-		// Optional
-		$customer_details = array(
-		  'first_name'    => "Andri",
-		  'last_name'     => "Litani",
-		  'email'         => "andri@litani.com",
-		  'phone'         => "081122334455",
-		  'billing_address'  => $billing_address,
-		  'shipping_address' => $shipping_address
-		);
+      // Data yang akan dikirim untuk request redirect_url.
+      $credit_card['secure'] = true;
+      //ser save_card true to enable oneclick or 2click
+      //$credit_card['save_card'] = true;
 
-		// Data yang akan dikirim untuk request redirect_url.
-        $credit_card['secure'] = true;
-        //ser save_card true to enable oneclick or 2click
-        //$credit_card['save_card'] = true;
+      $time = time();
+      $custom_expiry = array(
+          'start_time' => date("Y-m-d H:i:s O",$time),
+          'unit' => 'hour', 
+          'duration'  => 24
+      );
+      
+      $transaction_data = array(
+          'transaction_details'=> $transaction_details,
+          'item_details'       => $item_details,
+          'customer_details'   => $customer_details,
+          'credit_card'        => $credit_card,
+          'expiry'             => $custom_expiry
+      );
 
-        $time = time();
-        $custom_expiry = array(
-            'start_time' => date("Y-m-d H:i:s O",$time),
-            'unit' => 'minute', 
-            'duration'  => 2
-        );
-        
-        $transaction_data = array(
-            'transaction_details'=> $transaction_details,
-            'item_details'       => $item_details,
-            'customer_details'   => $customer_details,
-            'credit_card'        => $credit_card,
-            'expiry'             => $custom_expiry
-        );
-
-		error_log(json_encode($transaction_data));
-		$snapToken = $this->midtrans->getSnapToken($transaction_data);
-		error_log($snapToken);
-		echo $snapToken;
+      error_log(json_encode($transaction_data));
+      $snapToken = $this->midtrans->getSnapToken($transaction_data);
+      error_log($snapToken);
+      echo $snapToken;
+      
     }
 
     public function finish()
     {
     	$result = json_decode($this->input->post('result_data'));
-    	echo 'RESULT <br><pre>';
-    	var_dump($result);
-    	echo '</pre>' ;
+    	// echo 'RESULT <br><pre>';
+    	// var_dump($result);
+    	// echo '</pre>' ;
+      redirect('front', 'refresh');
 
+    }
+
+    public function status(){
+      $data = $this->midtrans->status('828784954');
+      print_r($data);
     }
 }

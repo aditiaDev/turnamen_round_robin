@@ -49,7 +49,7 @@
             </div>
             <div class="col-lg-3 col-md-4 text-center">
               <h2 style="font-size: 22px;" class="dollar">Rp. <?php echo number_format($data[0]['biaya_pendaftaran'],2,',','.') ?></h2>
-              <a href="registration.html" class="cmn-btn">Join Now!</a>
+              <button class="cmn-btn" id="BTN_JOIN">Join Now!</button>
             </div>
           </div>
           <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -206,12 +206,66 @@
           </div>
       </div>
     </div>
+    <form id="payment-form" method="post" action="<?=site_url()?>snap/finish">
+      <input type="hidden" name="result_type" id="result-type" value=""></div>
+      <input type="hidden" name="result_data" id="result-data" value=""></div>
+    </form>
 
 </section>
 <!-- Testimonials Content End -->
 
 <script src="<?php echo base_url('/assets/begam/js/jquery-3.5.1.min.js'); ?>"></script>
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-C_hVzhEuRXcHPsa6"></script>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 <script>
-  
+  $('#BTN_JOIN').click(function (event) {
+    event.preventDefault();
+    if(!confirm('Daftar Event ini?')) return
+    $(this).attr("disabled", "disabled");
+    
+    $.ajax({
+      url: "<?php echo site_url('snap/token') ?>",
+      cache: false,
+      type: "POST",
+      data: {
+        id_event: "<?php echo $data[0]['id_event']; ?>"
+      },
+      success: function(data) {
+        //location = data;
+
+        console.log('token = '+data);
+        
+        var resultType = document.getElementById('result-type');
+        var resultData = document.getElementById('result-data');
+
+        function changeResult(type,data){
+          $("#result-type").val(type);
+          $("#result-data").val(JSON.stringify(data));
+          //resultType.innerHTML = type;
+          //resultData.innerHTML = JSON.stringify(data);
+        }
+
+        snap.pay(data, {
+          
+          onSuccess: function(result){
+            changeResult('success', result);
+            console.log(result.status_message);
+            console.log(result);
+            $("#payment-form").submit();
+          },
+          onPending: function(result){
+            changeResult('pending', result);
+            console.log(result.status_message);
+            $("#payment-form").submit();
+          },
+          onError: function(result){
+            changeResult('error', result);
+            console.log(result.status_message);
+            $("#payment-form").submit();
+          }
+        });
+      }
+    });
+  });
 </script>
 <?php include 'footer.php'; ?>

@@ -131,6 +131,7 @@ class Jadwal extends CI_Controller {
                       "id_pertandingan" => $kode,
                       "id_grup" => $grup['id_grup'],
                       "id_event" => $id_event,
+                      "jenis_pertandingan" => 'GRUP',
                     );
             $this->db->insert('tb_pertandingan', $data);
 
@@ -199,7 +200,7 @@ class Jadwal extends CI_Controller {
           (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1) team1,
           (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1,1) team2
           FROM tb_pertandingan a, tb_grup b
-          WHERE a.id_grup=b.id_grup
+          WHERE a.id_grup=b.id_grup AND a.jenis_pertandingan='GRUP'
         ) TB1, tb_team TB2, tb_team TB3
         WHERE TB1.team1=TB2.id_team
         AND TB1.team2=TB3.id_team
@@ -290,6 +291,160 @@ class Jadwal extends CI_Controller {
 
     $output = array("status" => "success", "message" => "Data Berhasil di Update");
     echo json_encode($output);
+  }
+
+  public function playOff(){
+    $this->load->view('template/header');
+    $this->load->view('template/sidebar');
+    $this->load->view('pages/playoff');
+    $this->load->view('template/footer');
+  }
+
+  public function inputPlayOff(){
+    $id_event = $this->input->post('id_event');
+
+    $this->db->where('id_event', $this->input->post('id_event'));
+    $this->db->where('jenis_pertandingan', 'PLAYOFF');
+    $this->db->delete('tb_pertandingan');
+
+    $event = $this->db->query("SELECT DISTINCT id_grup FROM tb_pertandingan A WHERE A.id_event='".$id_event."' ORDER BY id_grup")->result_array();
+    
+    $arr=array();
+    $i=0;
+    
+    
+    foreach($event as $dtEvent){
+      // echo $dtEvent['id_grup'];
+      
+      $team = $this->db->query("
+                SELECT id_grup, nm_grup, id_team, nm_team, SUM(skor) SKOR FROM(
+                    SELECT A.id_grup,C.id_team, C.nm_team,B.skor, D.nm_grup
+                    FROM tb_pertandingan A, tb_dtl_pertandingan B, tb_team C, tb_grup D
+                    WHERE A.id_pertandingan=B.id_pertandingan
+                    AND B.id_team=C.id_team
+                    AND A.id_grup=D.id_grup
+                    AND A.id_event='".$id_event."'
+                ) AS ASD
+                WHERE id_grup='".$dtEvent['id_grup']."'
+                GROUP BY id_grup,nm_grup,id_team, nm_team
+                ORDER BY SKOR DESC
+                LIMIT 2
+              ")->result_array();
+      $j=1;
+      foreach($team as $dtTeam){
+        $arr[$i]['rank']=$j;
+        $arr[$i]['id_grup']=$dtTeam['id_grup'];
+        $arr[$i]['nm_grup']=$dtTeam['nm_grup'];
+        $arr[$i]['id_team']=$dtTeam['id_team'];
+        $arr[$i]['nm_team']=$dtTeam['nm_team'];
+        $i++;
+        $j++;
+      }
+      
+    }
+    shuffle($arr);
+  
+    $arr2 = array();
+    $jmlData = count($arr);
+    $a=0;
+    foreach($arr as $row){
+      for($k=0;$k<=$jmlData;$k++){
+        if(!in_array($row['id_team'], $arr2)){
+          if(!in_array($arr[$k]['id_team'], $arr2)){
+            if($row['id_team'] <> $arr[$k]['id_team'] AND $row['id_grup'] <> $arr[$k]['id_grup'] AND $row['rank'] <> $arr[$k]['rank']){
+              // echo $row['id_team'].$row['nm_grup'].$row['rank']." VS ".$arr[$k]['id_team'].$arr[$k]['nm_grup'].$arr[$k]['rank']."</br>";
+
+              $unik = 'VS'.date('Ym');
+              $kode = $this->db->query("select MAX(id_pertandingan) LAST_NO from tb_pertandingan WHERE id_pertandingan LIKE '".$unik."%'")->row()->LAST_NO;
+              
+              $urutan = (int) substr($kode, -5);
+              $urutan++;
+              $kode = $unik . sprintf("%05s", $urutan);
+
+              $data = array(
+                        "id_pertandingan" => $kode,
+                        "id_event" => $id_event,
+                        "jenis_pertandingan" => 'PLAYOFF',
+                      );
+              $this->db->insert('tb_pertandingan', $data);
+
+              $data = array(
+                        "id_pertandingan" => $kode,
+                        "id_team" => $row['id_team'],
+                      );
+              $this->db->insert('tb_dtl_pertandingan', $data);
+
+              $data = array(
+                        "id_pertandingan" => $kode,
+                        "id_team" => $arr[$k]['id_team'],
+                      );
+              $this->db->insert('tb_dtl_pertandingan', $data);
+
+              $datas[$a]['id_pertandingan'] = $kode;
+              $datas[$a]['team'] = $row['nm_team']." VS ".$arr[$k]['nm_team'];
+              $a++;
+              array_push($arr2, $row['id_team'], $arr[$k]['id_team']);
+              $k=$jmlData;
+            }
+          }
+        }
+      }
+
+    }
+
+    $output = array("status" => "success", "message" => "Jadwal Pertandingan Berhasil dibuat", "data" => $datas);
+    echo json_encode($output);
+
+  }
+
+  public function jadwalPlayOff(){
+    $id_event = $this->input->post('id_event');
+    $data['data'] = $this->db->query("
+        SELECT TB1.id_pertandingan, TB1.id_event, 
+        IFNULL(DATE_FORMAT(TB1.tgl_pertandingan, '%d-%b-%Y'),'') tgl_pertandingan,
+        IFNULL(DATE_FORMAT(TB1.tgl_pertandingan, '%H:%i'),'') waktu_pertandingan,
+        CONCAT(TB2.nm_team,' VS ',TB3.nm_team) nm_team
+        FROM(
+          SELECT a.id_pertandingan, a.tgl_pertandingan,  a.id_event,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1) team1,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1,1) team2
+          FROM tb_pertandingan a
+          WHERE a.jenis_pertandingan='PLAYOFF'
+        ) TB1, tb_team TB2, tb_team TB3
+        WHERE TB1.team1=TB2.id_team
+        AND TB1.team2=TB3.id_team
+        AND TB1.id_event='".$this->input->post('id_event')."'
+    ")->result();
+  	echo json_encode($data);
+  }
+
+  public function getJadwalPlayOff(){
+    $id_event = $this->input->post('id_event');
+    $data['data'] = $this->db->query("
+        SELECT TB1.id_pertandingan, TB1.id_event, 
+        IFNULL(DATE_FORMAT(TB1.tgl_pertandingan, '%d-%b-%Y'),'') tgl_pertandingan,
+        IFNULL(DATE_FORMAT(TB1.tgl_pertandingan, '%H:%i'),'') waktu_pertandingan,
+        CONCAT(TB2.nm_team,' VS ',TB3.nm_team) nm_team, TB1.team1, TB1.team2,TB2.nm_team nm_team1, TB3.nm_team nm_team2,
+        (SELECT CASE WHEN dtl.hasil='SERI' THEN 'SERI' ELSE (SELECT nm_team FROM tb_team WHERE id_team=dtl.id_team)  END FROM tb_dtl_pertandingan dtl WHERE dtl.id_pertandingan=TB1.id_pertandingan AND dtl.hasil IN ('MENANG','SERI') limit 1) HASIL
+        FROM(
+          SELECT a.id_pertandingan, a.tgl_pertandingan,  a.id_event,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1) team1,
+          (SELECT id_team FROM tb_dtl_pertandingan WHERE id_pertandingan=a.id_pertandingan limit 1,1) team2
+          FROM tb_pertandingan a
+          WHERE a.jenis_pertandingan='PLAYOFF'
+        ) TB1, tb_team TB2, tb_team TB3
+        WHERE TB1.team1=TB2.id_team
+        AND TB1.team2=TB3.id_team
+        AND TB1.id_event='".$this->input->post('id_event')."'
+    ")->result();
+  	echo json_encode($data);
+  }
+
+  public function hasilPlayOff(){
+    $this->load->view('template/header');
+    $this->load->view('template/sidebar');
+    $this->load->view('pages/hasilPlayOff');
+    $this->load->view('template/footer');
   }
 
 }
