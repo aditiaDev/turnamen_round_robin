@@ -11,7 +11,7 @@
         <div class="col-4">
           <div class="card card-dark" style="margin-top: 1rem">
             <div class="card-header">
-              <h3 class="card-title">Atur Jadwal PlayOff</h3>
+              <h3 class="card-title">Atur Jadwal Final</h3>
             </div>
 
               
@@ -181,9 +181,9 @@
   });
 
   $("#BTN_PROSES").click(function(){
-    if($("#dtJadwal .jdl").length == 0){
+
         $.ajax({
-          url: "<?php echo site_url('jadwal/inputPlayOff') ?>",
+          url: "<?php echo site_url('jadwal/inputFinal') ?>",
           type: "POST",
           dataType: "JSON",
           data: {
@@ -199,26 +199,7 @@
             }
           }
         })
-    }else{
-        $.ajax({
-          url: "<?php echo site_url('jadwal/inputPlayOff2') ?>",
-          type: "POST",
-          dataType: "JSON",
-          data: {
-            id_event: $("[name='id_event']").val()
-          },
-          success: function(data){
-            // console.log(data)
-            if (data.status == "success") {
-              toastr.info(data.message)
-              REFRESH_DATA()
-
-            }else{
-              toastr.error(data.message)
-            }
-          }
-        })
-    }
+    
         
   })
 
@@ -232,7 +213,7 @@
   function REFRESH_DATA(){
     $("#BTN_PROSES").attr('disabled',false)
     $.ajax({
-      url: "<?php echo site_url('jadwal/jadwalPlayOff') ?>",
+      url: "<?php echo site_url('jadwal/getJadwalFinal') ?>",
       type: "POST",
       dataType: "JSON",
       data: {
@@ -247,7 +228,7 @@
             rowData += '<div class="col-6 jdl">'+
                           '<div class="card card-dark" >'+
                             '<div class="card-header">'+
-                              '<h3 class="card-title">PlayOff ke-'+no+'</h3>'+
+                              '<h3 class="card-title">'+value['data'][0]['jenis_pertandingan']+'</h3>'+
                             '</div>'+
                               '<div class="card-body">'+
                                 '<table class="table table-bordered">'+

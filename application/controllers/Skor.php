@@ -24,6 +24,7 @@ class Skor extends CI_Controller {
               CASE WHEN B.hasil='SERI' THEN 1 END SERI, B.skor
               FROM tb_pertandingan A, tb_dtl_pertandingan B, tb_team C
               WHERE A.id_pertandingan=B.id_pertandingan
+              AND A.jenis_pertandingan='GRUP'
               AND B.id_team=C.id_team
               AND A.id_event='".$this->input->post('id_event')."'
           ) AS ASD

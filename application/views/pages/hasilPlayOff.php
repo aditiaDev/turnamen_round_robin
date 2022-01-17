@@ -33,6 +33,7 @@
                 <thead>
                   <tr>
                     <th width="80px;">No</th>
+                    <th >PlayOff ke</th>
                     <th >Versus</th>
                     <th >Tanggal</th>
                     <th >Waktu</th>
@@ -183,7 +184,7 @@
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            { "data": "nm_team" },{ "data": "tgl_pertandingan" },{ "data": "waktu_pertandingan" },{ "data": "HASIL" },
+            { "data": "jenis_pertandingan" },{ "data": "nm_team" },{ "data": "tgl_pertandingan" },{ "data": "waktu_pertandingan" },{ "data": "HASIL" },
             { "data": null, 
               "render" : function(data, type, full, meta){
                 // console.log(meta.row)
@@ -205,7 +206,7 @@
       $("[name='tgl_pertandingan']").val(data.tgl_pertandingan)
       $("[name='waktu_pertandingan']").val(data.waktu_pertandingan)
 
-      $("[name='pemenang']").html("<option value='"+data.team1+"'>"+data.nm_team1+"</option><option value='"+data.team2+"'>"+data.nm_team2+"</option><option value='SERI'>SERI</option>")
+      $("[name='pemenang']").html("<option value='"+data.team1+"'>"+data.nm_team1+"</option><option value='"+data.team2+"'>"+data.nm_team2+"</option>")
 
       $("#modal_edit").modal('show')
     }

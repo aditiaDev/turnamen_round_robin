@@ -88,7 +88,12 @@
                 <p>Hasil Pertandingan</p>
               </a>
             </li>
-            
+            <li class="nav-item">
+              <a href="<?php echo base_url("skor/")?>" class="nav-link">
+                <i class="nav-icon fa fa-futbol"></i>
+                <p>Klasemen Grup</p>
+              </a>
+            </li>
           </ul>
         </li>
 
@@ -109,6 +114,31 @@
             </li>
             <li class="nav-item">
               <a href="<?php echo base_url("jadwal/hasilPlayOff")?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Hasil Pertandingan</p>
+              </a>
+            </li>
+            
+          </ul>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fa fa-user-friends"></i>
+            <p>
+              Final
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo base_url("jadwal/final")?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Jadwal Final</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url("jadwal/hasilFinal")?>" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Hasil Pertandingan</p>
               </a>
@@ -142,12 +172,7 @@
           </ul>
         </li> -->
 
-        <li class="nav-item">
-          <a href="<?php echo base_url("skor/")?>" class="nav-link">
-            <i class="nav-icon fa fa-futbol"></i>
-            <p>Klasemen</p>
-          </a>
-        </li>
+        
 
         <li class="nav-item">
           <a href="<?php echo base_url("login/logout")?>" class="nav-link">
