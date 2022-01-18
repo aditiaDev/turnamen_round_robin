@@ -147,32 +147,12 @@
           </ul>
         </li>
 
-        <!-- <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
+        <li class="nav-item">
+          <a href="<?php echo base_url("juara/")?>" class="nav-link">
             <i class="nav-icon fa fa-trophy"></i>
-            <p>
-              Final Pertandingan
-              <i class="fas fa-angle-left right"></i>
-            </p>
+            <p>Juara Pertandingan</p>
           </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="<?php echo base_url("jadwal/final")?>" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Jadwal Final</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="<?php echo base_url("jadwal/hasilfinal")?>" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Hasil Pertandingan</p>
-              </a>
-            </li>
-            
-          </ul>
-        </li> -->
-
-        
+        </li>        
 
         <li class="nav-item">
           <a href="<?php echo base_url("login/logout")?>" class="nav-link">

@@ -10,6 +10,7 @@
 
     <link rel="shortcut icon" href="<?php echo base_url('/assets/begam/images/fav.png'); ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/bootstrap.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/fontawesome.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/slick.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('/assets/begam/css/nice-select.css'); ?>">
@@ -30,14 +31,14 @@
                 <div class="top-area">
                     <div class="row d-flex align-items-center">
                         <div class="col-sm-5 col">
-                            <a class="back-home" href="index.html">
-                                <img src="images/left-icon.png" alt="image">
-                                Back To Begam
+                            <a class="back-home" href="<?php echo base_url("front/")?>">
+                                <img src="<?php echo base_url('/assets/begam/images/left-icon.png'); ?>" alt="image">
+                                Back To Home
                             </a>
                         </div>
                         <div class="col-sm-5 col">
                             <a href="#">
-                                <img src="images/logo.png" alt="image">
+                                <img src="<?php echo base_url('/assets/begam/images/logo.png'); ?>" alt="image">
                             </a>
                         </div>
                     </div>
@@ -78,6 +79,7 @@
 
     <script src="<?php echo base_url('/assets/begam/js/jquery-3.5.1.min.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/bootstrap.min.js'); ?>"></script>
+    <script src="<?php echo base_url('/assets/adminlte/plugins/toastr/toastr.min.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/slick.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/jquery.nice-select.min.js'); ?>"></script>
     <script src="<?php echo base_url('/assets/begam/js/fontawesome.js'); ?>"></script>

@@ -49,7 +49,12 @@
             </div>
             <div class="col-lg-3 col-md-4 text-center">
               <h2 style="font-size: 22px;" class="dollar">Rp. <?php echo number_format($data[0]['biaya_pendaftaran'],2,',','.') ?></h2>
+              
+              <?php 
+                if($this->session->userdata('id_user')){
+              ?>
               <button class="cmn-btn" id="BTN_JOIN">Join Now!</button>
+              <?php } ?>
             </div>
           </div>
           <ul class="nav nav-tabs" id="myTab" role="tablist">

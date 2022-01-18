@@ -18,17 +18,19 @@
                                   <?php if($this->session->userdata('id_user')){ ?>
                                     <li><a href="<?php echo base_url("front/turnamenku")?>">Turnamenku</a></li>
                                   <?php }?>
-                                    <li><a href="#">Pembagian Grup</a></li>
-                                    <li><a href="#">Jadwal Pertandingan</a></li>
-                                    <li><a href="#">Hasil Pertandingan</a></li>
+                                    <li><a href="<?php echo base_url("front/pembagianGrup")?>">Pembagian Grup</a></li>
+                                    <li><a href="<?php echo base_url("front/jadwal")?>">Jadwal Pertandingan</a></li>
+                                    <li><a href="<?php echo base_url("front/hasilPertandingan")?>">Hasil Pertandingan</a></li>
                                 </ul>
                             </li>
+                            <?php if($this->session->userdata('id_user')){ ?>
                             <li class="menu_has_children"><a href="#0">Team</a>
                                 <ul class="sub-menu">
                                     <li><a href="<?php echo base_url("front/team")?>">Data Team</a></li>
+                                    <li><a href="<?php echo base_url("front/peserta")?>">Data Anggota Team</a></li>
                                 </ul>
                             </li>
-                            <!-- <li><a href="<?php echo base_url("front/pembayaran")?>">Pembayaran</a></li> -->
+                            <?php } ?>
                         </ul>
                     </div>
                 </nav>

@@ -611,6 +611,9 @@ class Jadwal extends CI_Controller {
       $this->db->insert('tb_dtl_pertandingan', $data);
     }
 
+    $output = array("status" => "success", "message" => "Jadwal Pertandingan Berhasil dibuat");
+    echo json_encode($output);
+
   }
 
   public function getJadwalFinal(){

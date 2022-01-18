@@ -144,4 +144,64 @@ class Front extends CI_Controller {
     $this->load->view('front/turnamenku', $data);
   }
 
+  public function jadwal(){
+    
+    $this->load->view('front/jadwal');
+  }
+
+  public function hasilPertandingan(){
+    
+    $this->load->view('front/hasilPertandingan');
+  }
+
+  public function pembagianGrup(){
+    
+    $this->load->view('front/pembagianGrup');
+  }
+
+  public function peserta(){
+    
+    $this->load->view('front/peserta');
+  }
+
+  public function savePeserta(){
+    
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('nm_peserta', 'Nama Anggota', 'required');
+    $this->form_validation->set_rules('alamat', 'Alamat Anggota', 'required');
+
+    if($this->form_validation->run() == FALSE){
+      // echo validation_errors();
+      $output = array("status" => "error", "message" => validation_errors());
+      echo json_encode($output);
+      return false;
+    }
+
+    $id_team = $this->db->query("SELECT id_team FROM tb_team WHERE id_user='".$this->session->userdata('id_user')."'")->row()->id_team;
+    
+    $data = array(
+              "nm_peserta" => $this->input->post('nm_peserta'),
+              "alamat" => $this->input->post('alamat'),
+              "id_team" => $id_team,
+            );
+    $this->db->insert('tb_peserta', $data);
+    $output = array("status" => "success", "message" => "Data Berhasil Disimpan");
+    echo json_encode($output);
+  }
+
+  public function getPesertaById(){
+    $data['data'] = $this->db->query("SELECT * FROM tb_peserta WHERE id_team IN (
+      SELECT id_team FROM tb_team WHERE id_user='".$this->session->userdata('id_user')."'
+      )")->result();
+  	echo json_encode($data);
+  }
+
+  public function deletePeserta(){
+    $this->db->where('id_peserta', $this->input->post('id_peserta'));
+    $this->db->delete('tb_peserta');
+
+    $output = array("status" => "success", "message" => "Data Berhasil di Hapus");
+    echo json_encode($output);
+  }
+
 }
