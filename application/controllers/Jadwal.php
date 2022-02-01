@@ -307,7 +307,7 @@ class Jadwal extends CI_Controller {
     $this->db->where('jenis_pertandingan', 'PLAYOFF');
     $this->db->delete('tb_pertandingan');
 
-    $event = $this->db->query("SELECT DISTINCT id_grup FROM tb_pertandingan A WHERE A.id_event='".$id_event."' ORDER BY id_grup")->result_array();
+    $event = $this->db->query("SELECT DISTINCT id_grup FROM tb_pertandingan A WHERE A.id_event='".$id_event."' AND A.id_grup IS NOT NULL ORDER BY id_grup")->result_array();
     
     $arr=array();
     $i=0;
@@ -420,6 +420,7 @@ class Jadwal extends CI_Controller {
             AND b.id_team=c.id_team
             AND a.jenis_pertandingan=(select MAX(jenis_pertandingan) from tb_pertandingan WHERE id_event='".$id_event."' AND jenis_pertandingan LIKE '%PLAYOFF%')
             AND b.hasil='MENANG'
+            ORDER BY b.id_dtl_pertandingan
     ")->result_array();
     shuffle($team);
 
